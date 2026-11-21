@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invest — Trust Invest</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --ink: #0a2540;
+      --ink-soft: #1e3b4b;
+      --muted: #4f6a7c;
+      --muted-2: #8aa3b1;
+      --green: #1e7b4c;
+      --green-dark: #14633a;
+      --green-soft: #e9f3ee;
+      --line: #deede7;
+      --bg: #f6f9fc;
+      --card: #ffffff;
+      --red: #e74c3c;
+      --amber: #f39c12;
+      --btc: #f7931a;
+      --blue: #2980b9;
+      --purple: #9b59b6;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+      min-height: 100vh;
+      padding: 24px 20px 100px;
+    }
+    .wrap { max-width: 1060px; margin: 0 auto; }
+
+    /* TOPBAR */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.92rem;
+      padding: 10px 16px;
+      border-radius: 40px;
+      background: white;
+      border: 1px solid var(--line);
+      transition: 0.2s;
+    }
+    .back-link:hover { border-color: var(--green); color: var(--green); }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .brand i { color: var(--green); font-size: 1.5rem; }
+    .topbar-right { display: flex; align-items: center; gap: 10px; }
+
+    .refresh-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: white;
+      border: 1px solid var(--line);
+      padding: 9px 16px;
+      border-radius: 40px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: var(--ink);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .refresh-btn:hover { border-color: var(--green); color: var(--green); }
+    .refresh-btn.spinning i { animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--green), #2fa36b);
+      color: white;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      border: 2px solid white;
+      box-shadow: 0 4px 12px rgba(30, 123, 76, 0.25);
+      cursor: pointer;
+      position: relative;
+    }
+    .logout-pop {
+      position: absolute;
+      top: 54px; right: 0;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0,30,20,0.15);
+      padding: 6px;
+      display: none;
+      z-index: 1000;
+      min-width: 150px;
+    }
+    .logout-pop.open { display: block; }
+    .logout-pop button {
+      width: 100%;
+      background: transparent;
+      border: none;
+      text-align: left;
+      padding: 10px 14px;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: var(--ink);
+      cursor: pointer;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logout-pop button:hover { background: #fdecec; color: var(--red); }
+
+    /* BALANCE BANNER */
+    .balance-banner {
+      background: linear-gradient(140deg, #0a2540 0%, #123e55 65%, #14594a 100%);
+      color: white;
+      border-radius: 28px;
+      padding: 26px 30px;
+      margin-bottom: 26px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      box-shadow: 0 18px 40px rgba(10,37,64,0.25);
+      position: relative;
+      overflow: hidden;
+    }
+    .balance-banner::before {
+      content: '';
+      position: absolute;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(76,219,140,0.18) 0%, transparent 65%);
+      top: -120px; right: -100px;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .balance-banner .left { position: relative; z-index: 2; }
+    .balance-banner .lbl {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #9fc0b4;
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .balance-banner .amt {
+      font-size: 2.3rem;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1;
+      transition: color 0.3s;
+    }
+    .balance-banner .amt.flash { color: #4cdb8c; }
+    .balance-banner .right {
+      position: relative;
+      z-index: 2;
+      text-align: right;
+    }
+    .balance-banner .right .k {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #9fc0b4;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .balance-banner .right .v {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #4cdb8c;
+    }
+
+    /* SECTION TITLE */
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.6px;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .section-sub {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-bottom: 20px;
+    }
+
+    /* PLAN SELECTOR */
+    .plan-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    @media (max-width: 700px) { .plan-selector { grid-template-columns: 1fr; } }
+    .plan-option {
+      background: white;
+      border: 2px solid var(--line);
+      border-radius: 22px;
+      padding: 20px 18px;
+      cursor: pointer;
+      transition: 0.2s;
+      text-align: center;
+      position: relative;
+    }
+    .plan-option:hover { border-color: #b5d5c7; transform: translateY(-2px); }
+    .plan-option.selected {
+      border-color: var(--green);
+      background: linear-gradient(145deg, #ffffff 0%, #f0f9f4 100%);
+      box-shadow: 0 10px 26px rgba(30,123,76,0.15);
+    }
+    .plan-option .pic {
+      width: 54px; height: 54px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin: 0 auto 12px;
+    }
+    .plan-option .pic.btc { background: #fff3e0; color: var(--btc); }
+    .plan-option .pic.ai  { background: #eaf4fb; color: var(--blue); }
+    .plan-option .pic.ads { background: #f4ecf7; color: var(--purple); }
+    .plan-option h4 {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .plan-option p {
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .plan-option .tick {
+      position: absolute;
+      top: 12px; right: 12px;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: var(--green);
+      color: white;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+    }
+    .plan-option.selected .tick { display: flex; }
+
+    /* DURATION SELECTOR */
+    .duration-label {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--ink-soft);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .duration-label i { color: var(--green); }
+    .duration-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 26px;
+    }
+    .duration-card {
+      background: white;
+      border: 2px solid var(--line);
+      border-radius: 18px;
+      padding: 16px 14px;
+      cursor: pointer;
+      transition: 0.2s;
+      text-align: center;
+      position: relative;
+    }
+    .duration-card:hover { border-color: #b5d5c7; transform: translateY(-2px); }
+    .duration-card.selected {
+      border-color: var(--green);
+      background: linear-gradient(145deg, #ffffff 0%, #f0f9f4 100%);
+      box-shadow: 0 10px 26px rgba(30,123,76,0.15);
+    }
+    .duration-card .dur-days {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .duration-card .dur-rate {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--green);
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+    }
+    .duration-card .dur-sub {
+      font-size: 0.68rem;
+      color: var(--muted-2);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+    }
+    .duration-card .dur-tick {
+      position: absolute;
+      top: 8px; right: 8px;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: var(--green);
+      color: white;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+    }
+    .duration-card.selected .dur-tick { display: flex; }
+    .duration-card.recommended::before {
+      content: 'POPULAR';
+      position: absolute;
+      top: -8px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--green);
+      color: white;
+      font-size: 0.58rem;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      padding: 2px 10px;
+      border-radius: 20px;
+    }
+
+    /* INVEST FORM CARD */
+    .form-card {
+      background: white;
+      border-radius: 28px;
+      padding: 30px 30px;
+      border: 1px solid var(--line);
+      box-shadow: 0 14px 34px rgba(0,50,30,0.06);
+      margin-bottom: 30px;
+    }
+    .field { margin-bottom: 18px; }
+    .field label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+      margin-bottom: 8px;
+    }
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-wrap > .icon {
+      position: absolute;
+      left: 16px;
+      color: var(--muted-2);
+      font-size: 1rem;
+      pointer-events: none;
+    }
+    .input-wrap input {
+      width: 100%;
+      padding: 16px 60px 16px 44px;
+      font-size: 1.15rem;
+      font-family: inherit;
+      font-weight: 700;
+      color: var(--ink);
+      background: #f8fbfa;
+      border: 1.5px solid #d5e6de;
+      border-radius: 16px;
+      outline: none;
+      transition: 0.2s;
+    }
+    .input-wrap input:focus {
+      border-color: var(--green);
+      background: white;
+      box-shadow: 0 0 0 4px rgba(30,123,76,0.1);
+    }
+    .input-wrap .suffix {
+      position: absolute;
+      right: 16px;
+      font-weight: 700;
+      color: var(--muted);
+      font-size: 0.9rem;
+      background: var(--green-soft);
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+    .quick-amounts {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .quick-amounts button {
+      background: var(--green-soft);
+      color: var(--green);
+      border: 1px solid #cde3d9;
+      padding: 7px 16px;
+      border-radius: 40px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .quick-amounts button:hover { background: var(--green); color: white; border-color: var(--green); }
+
+    /* PROJECTION BOX */
+    .projection {
+      background: linear-gradient(135deg, #f0f9f4 0%, #e5f2ec 100%);
+      border: 1.5px solid #cde3d9;
+      border-radius: 22px;
+      padding: 22px 24px;
+      margin: 8px 0 22px;
+    }
+    .projection-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 16px;
+    }
+    .proj-item .k {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--muted);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .proj-item .v {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--ink);
+    }
+    .proj-item.profit .v { color: var(--green); }
+    .proj-item.payout .v { color: var(--green-dark); }
+
+    /* BUTTON */
+    .btn {
+      width: 100%;
+      padding: 17px;
+      font-family: inherit;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: white;
+      background: var(--green);
+      border: 1.5px solid var(--green);
+      border-radius: 60px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 8px 20px rgba(30,123,76,0.25);
+      transition: 0.2s;
+    }
+    .btn:hover:not(:disabled) {
+      background: var(--green-dark);
+      border-color: var(--green-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 12px 26px rgba(30,123,76,0.35);
+    }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+    /* ACTIVE INVESTMENTS */
+    .inv-list { display: flex; flex-direction: column; gap: 14px; }
+    .inv-card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 22px 24px;
+      box-shadow: 0 8px 22px rgba(0,50,30,0.04);
+      transition: 0.2s;
+    }
+    .inv-card:hover { border-color: #b5d5c7; box-shadow: 0 12px 28px rgba(20,90,50,0.08); }
+    .inv-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .inv-plan {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .inv-plan .pic {
+      width: 44px; height: 44px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .inv-plan .pic.btc { background: #fff3e0; color: var(--btc); }
+    .inv-plan .pic.ai  { background: #eaf4fb; color: var(--blue); }
+    .inv-plan .pic.ads { background: #f4ecf7; color: var(--purple); }
+    .inv-plan h4 { font-size: 1rem; font-weight: 800; color: var(--ink); }
+    .inv-plan p { font-size: 0.75rem; color: var(--muted); font-weight: 600; }
+    .inv-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 20px;
+    }
+    .inv-status.active { background: var(--green-soft); color: var(--green); }
+    .inv-status.done { background: #eef5f1; color: var(--muted); }
+
+    .inv-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .inv-grid .cell .k {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted-2);
+      font-weight: 700;
+      margin-bottom: 3px;
+    }
+    .inv-grid .cell .v {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+    .inv-grid .cell .v.green { color: var(--green); }
+
+    /* COUNTDOWN */
+    .countdown-wrap {
+      background: #f8fbfa;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px 16px;
+    }
+    .countdown-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+    .countdown-label .pct { color: var(--green); }
+    .countdown-bar {
+      height: 8px;
+      background: #e2ede8;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    .countdown-bar > div {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), #2fa36b);
+      border-radius: 20px;
+      transition: width 0.6s ease;
+    }
+    .countdown-times {
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+    }
+    .cd-unit { text-align: center; flex: 1; }
+    .cd-unit .n {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--ink);
+      font-variant-numeric: tabular-nums;
+    }
+    .cd-unit .l {
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted-2);
+      font-weight: 700;
+      margin-top: 1px;
+    }
+
+    /* EMPTY */
+    .empty-state {
+      text-align: center;
+      padding: 50px 20px;
+      color: var(--muted);
+      background: white;
+      border-radius: 22px;
+      border: 1px dashed var(--line);
+    }
+    .empty-state i { font-size: 2.4rem; color: var(--muted-2); margin-bottom: 14px; display: block; }
+    .empty-state p { font-size: 0.95rem; font-weight: 600; }
+    .empty-state small { font-size: 0.82rem; color: var(--muted-2); }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--ink);
+      color: white;
+      padding: 13px 24px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.35s;
+      z-index: 3000;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      max-width: 90vw;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.success { background: var(--green); }
+    .toast.error { background: var(--red); }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10,37,64,0.6);
+      backdrop-filter: blur(5px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: white;
+      border-radius: 26px;
+      width: 100%;
+      max-width: 420px;
+      padding: 30px 28px;
+      box-shadow: 0 30px 70px rgba(0,30,20,0.35);
+      border: 1px solid var(--line);
+      animation: modalIn 0.25s ease;
+      text-align: center;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(14px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .modal .big-check {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: var(--green-soft);
+      color: var(--green);
+      font-size: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+    .modal h2 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .modal p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 22px;
+      line-height: 1.5;
+    }
+    .modal .summary {
+      background: #f8fbfa;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 22px;
+      text-align: left;
+    }
+    .modal .summary .row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      padding: 5px 0;
+    }
+    .modal .summary .row .k { color: var(--muted); font-weight: 600; }
+    .modal .summary .row .v { color: var(--ink); font-weight: 800; }
+    .modal .summary .row .v.green { color: var(--green); }
+    .modal .summary hr {
+      border: none;
+      border-top: 1px dashed var(--line);
+      margin: 8px 0;
+    }
+
+    @media (max-width: 520px) {
+      .form-card { padding: 24px 20px; }
+      .balance-banner .amt { font-size: 1.9rem; }
+      .countdown-times { gap: 6px; }
+      .cd-unit .n { font-size: 0.95rem; }
+      .duration-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <a href="dashboard.html" class="back-link"><i class="fas fa-arrow-left"></i> Dashboard</a>
+      <a href="index.html" class="brand"><i class="fas fa-shield-halved"></i> Trust Invest</a>
+      <div class="topbar-right">
+        <button class="refresh-btn" id="refreshBtn"><i class="fas fa-rotate"></i> Refresh</button>
+        <div style="position:relative;">
+          <div class="avatar" id="userAvatar" title="Your profile">TI</div>
+          <div class="logout-pop" id="logoutPop">
+            <button id="logoutBtn"><i class="fas fa-right-from-bracket"></i> Log out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BALANCE BANNER -->
+    <div class="balance-banner">
+      <div class="left">
+        <div class="lbl"><i class="fas fa-wallet"></i> Available balance</div>
+        <div class="amt" id="availableBalance">$0.00</div>
+      </div>
+      <div class="right">
+        <div class="k">Active investments</div>
+        <div class="v" id="activeCount">0</div>
+      </div>
+    </div>
+
+    <!-- INVEST FORM -->
+    <h2 class="section-title">Start a new investment</h2>
+    <p class="section-sub">Pick a plan and duration. Rate is always <strong>70% per 60 days</strong> — shorter and longer terms scale proportionally.</p>
+
+    <div class="plan-selector" id="planSelector">
+      <div class="plan-option selected" data-plan="bitcoin">
+        <div class="tick"><i class="fas fa-check"></i></div>
+        <div class="pic btc"><i class="fab fa-bitcoin"></i></div>
+        <h4>Bitcoin</h4>
+        <p>70% per 60 days</p>
+      </div>
+      <div class="plan-option" data-plan="ai">
+        <div class="tick"><i class="fas fa-check"></i></div>
+        <div class="pic ai"><i class="fas fa-robot"></i></div>
+        <h4>AI Auto‑Trade</h4>
+        <p>70% per 60 days</p>
+      </div>
+      <div class="plan-option" data-plan="ads">
+        <div class="tick"><i class="fas fa-check"></i></div>
+        <div class="pic ads"><i class="fas fa-ad"></i></div>
+        <h4>Digital Ads</h4>
+        <p>70% per 60 days</p>
+      </div>
+    </div>
+
+    <!-- DURATION SELECTOR -->
+    <div class="duration-label"><i class="fas fa-hourglass-half"></i> Choose your term</div>
+    <div class="duration-grid" id="durationGrid"></div>
+
+    <div class="form-card">
+      <div class="field">
+        <label for="investAmount">Investment amount (USD)</label>
+        <div class="input-wrap">
+          <i class="fas fa-dollar-sign icon"></i>
+          <input type="number" id="investAmount" placeholder="0.00" min="10" step="0.01" inputmode="decimal">
+          <span class="suffix">USD</span>
+        </div>
+        <div class="quick-amounts" id="quickAmounts">
+          <button type="button" data-amt="50">$50</button>
+          <button type="button" data-amt="100">$100</button>
+          <button type="button" data-amt="250">$250</button>
+          <button type="button" data-amt="500">$500</button>
+          <button type="button" data-amt="1000">$1,000</button>
+          <button type="button" data-amt="max">Max</button>
+        </div>
+      </div>
+
+      <div class="projection">
+        <div class="projection-grid">
+          <div class="proj-item">
+            <div class="k">You invest</div>
+            <div class="v" id="projInvest">$0.00</div>
+          </div>
+          <div class="proj-item profit">
+            <div class="k">Profit (<span id="projRatePct">70</span>%)</div>
+            <div class="v" id="projProfit">$0.00</div>
+          </div>
+          <div class="proj-item payout">
+            <div class="k">Total payout</div>
+            <div class="v" id="projPayout">$0.00</div>
+          </div>
+          <div class="proj-item">
+            <div class="k">Duration</div>
+            <div class="v" style="font-size:1.1rem;" id="projDuration">60 days</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn" id="investBtn" disabled>
+        <i class="fas fa-chart-line"></i> Invest now
+      </button>
+      <p style="text-align:center; font-size:0.78rem; color:var(--muted-2); margin-top:14px;">
+        <i class="fas fa-lock"></i> Minimum investment: $10 · Capital locked for the selected term
+      </p>
+    </div>
+
+    <!-- ACTIVE INVESTMENTS -->
+    <h2 class="section-title">Your investments</h2>
+    <p class="section-sub">Track your active plans and countdowns.</p>
+
+    <div class="inv-list" id="invList">
+      <div class="empty-state">
+        <i class="fas fa-chart-simple"></i>
+        <p>No investments yet</p>
+        <small>Start your first investment above to begin earning</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUCCESS MODAL -->
+  <div class="modal-overlay" id="successModal">
+    <div class="modal">
+      <div class="big-check"><i class="fas fa-check"></i></div>
+      <h2>Investment started!</h2>
+      <p>Your investment is now active and earning. Profit will be credited automatically at maturity.</p>
+      <div class="summary" id="successSummary"></div>
+      <button class="btn" id="successClose"><i class="fas fa-check"></i> Got it</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    /* =========================================================
+       CONFIG — 70% is the RATE PER 60 DAYS
+       ========================================================= */
+    const RATE_PER_60_DAYS = 0.70;
+    const BASE_PERIOD_DAYS = 60;
+
+    const PLAN_NAMES = { bitcoin: 'Bitcoin', ai: 'AI Auto-Trade', ads: 'Digital Ads' };
+    const PLAN_ICONS = { bitcoin: 'fa-btc', ai: 'fa-robot', ads: 'fa-ad' };
+
+    const DURATIONS = [
+      { days: 15,   label: '15 days',   popular: false },
+      { days: 30,   label: '30 days',   popular: false },
+      { days: 60,   label: '60 days',   popular: true  },
+      { days: 90,   label: '90 days',   popular: false },
+      { days: 120,  label: '120 days',  popular: false },
+      { days: 180,  label: '6 months',  popular: false },
+      { days: 270,  label: '9 months',  popular: false },
+      { days: 365,  label: '1 year',    popular: false },
+      { days: 730,  label: '2 years',   popular: false },
+      { days: 1095, label: '3 years',   popular: false },
+      { days: 1460, label: '4 years',   popular: false },
+      { days: 1825, label: '5 years',   popular: false }
+    ];
+
+    function rateForDays(days) { return RATE_PER_60_DAYS * (days / BASE_PERIOD_DAYS); }
+    function fmtPct(n) { return (Math.round(Number(n) * 100) / 100).toString(); }
+
+    /* =========================================================
+       AUTH
+       ========================================================= */
+    const token = localStorage.getItem('trustInvestToken');
+    let currentUser = {};
+    try { currentUser = JSON.parse(localStorage.getItem('trustInvestUser') || '{}'); } catch(e) {}
+    if (!token) window.location.href = 'login.html';
+
+    document.getElementById('userAvatar').textContent =
+      (currentUser.fullName || 'TI').split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase();
+
+    /* =========================================================
+       STATE
+       ========================================================= */
+    let selectedPlan = 'bitcoin';
+    let selectedDays = 60;
+    let balance = 0;
+    let investments = [];
+    let countdownTimer = null;
+    let lastBalanceSnapshot = null;
+
+    /* =========================================================
+       DOM
+       ========================================================= */
+    const availableBalance = document.getElementById('availableBalance');
+    const activeCount = document.getElementById('activeCount');
+    const investAmountInput = document.getElementById('investAmount');
+    const projInvest = document.getElementById('projInvest');
+    const projProfit = document.getElementById('projProfit');
+    const projPayout = document.getElementById('projPayout');
+    const projRatePct = document.getElementById('projRatePct');
+    const projDuration = document.getElementById('projDuration');
+    const investBtn = document.getElementById('investBtn');
+    const invList = document.getElementById('invList');
+    const quickAmounts = document.getElementById('quickAmounts');
+    const toast = document.getElementById('toast');
+    const successModal = document.getElementById('successModal');
+    const successSummary = document.getElementById('successSummary');
+    const successClose = document.getElementById('successClose');
+    const durationGrid = document.getElementById('durationGrid');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const avatarEl = document.getElementById('userAvatar');
+    const logoutPop = document.getElementById('logoutPop');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    /* =========================================================
+       HELPERS
+       ========================================================= */
+    function fmtUsd(n) {
+      return '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    function showToast(msg, type) {
+      toast.textContent = msg;
+      toast.className = 'toast show ' + (type || '');
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => { toast.className = 'toast ' + (type || ''); }, 3200);
+    }
+    function flashBalance() {
+      availableBalance.classList.add('flash');
+      setTimeout(() => availableBalance.classList.remove('flash'), 800);
+    }
+
+    /* =========================================================
+       API — ALWAYS send x-user-id so the server can identify us
+       ========================================================= */
+    async function api(path, opts = {}) {
+      const res = await fetch(path, {
+        ...opts,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
+          'x-user-id': (currentUser && currentUser.id) || '',
+          ...(opts.headers || {})
+        }
+      });
+      let data = {};
+      try { data = await res.json(); } catch (e) {}
+      if (!res.ok) throw new Error(data.message || 'Request failed');
+      return data;
+    }
+
+    /* =========================================================
+       DURATION CARDS
+       ========================================================= */
+    function renderDurations() {
+      durationGrid.innerHTML = DURATIONS.map(d => {
+        const ratePct = fmtPct(rateForDays(d.days) * 100);
+        const classes = ['duration-card'];
+        if (d.days === selectedDays) classes.push('selected');
+        if (d.popular) classes.push('recommended');
+        return `
+          <div class="${classes.join(' ')}" data-days="${d.days}">
+            <div class="dur-tick"><i class="fas fa-check"></i></div>
+            <div class="dur-days">${d.label}</div>
+            <div class="dur-rate">${ratePct}%</div>
+            <div class="dur-sub">total return</div>
+          </div>`;
+      }).join('');
+
+      durationGrid.querySelectorAll('.duration-card').forEach(el => {
+        el.addEventListener('click', () => {
+          selectedDays = Number(el.dataset.days);
+          durationGrid.querySelectorAll('.duration-card').forEach(c => c.classList.remove('selected'));
+          el.classList.add('selected');
+          updateProjection();
+          updateInvestBtn();
+        });
+      });
+    }
+
+    /* =========================================================
+       LOAD DATA FROM SERVER
+       ========================================================= */
+    async function loadData(manual = false) {
+      if (manual) refreshBtn.classList.add('spinning');
+      try {
+        const data = await api('/api/user/overview');
+        const newBalance = Number(data.balance) || 0;
+        const changed = lastBalanceSnapshot !== null && newBalance !== lastBalanceSnapshot;
+        balance = newBalance;
+        lastBalanceSnapshot = newBalance;
+        investments = Array.isArray(data.investments) ? data.investments : [];
+        render();
+        if (changed && manual) showToast('Balance updated', 'success');
+        else if (manual) showToast('Refreshed', 'success');
+      } catch (err) {
+        console.warn('Failed to load overview:', err);
+        if (manual) showToast(err.message || 'Could not refresh', 'error');
+      } finally {
+        refreshBtn.classList.remove('spinning');
+      }
+    }
+
+    /* =========================================================
+       RENDER
+       ========================================================= */
+    function render() {
+      availableBalance.textContent = fmtUsd(balance);
+      const active = investments.filter(i => i.status === 'active').length;
+      activeCount.textContent = active;
+      renderInvestments();
+      updateProjection();
+      updateInvestBtn();
+    }
+
+    function updateProjection() {
+      const amt = parseFloat(investAmountInput.value) || 0;
+      const rate = rateForDays(selectedDays);
+      const profit = amt * rate;
+      projInvest.textContent = fmtUsd(amt);
+      projProfit.textContent = fmtUsd(profit);
+      projPayout.textContent = fmtUsd(amt + profit);
+      projRatePct.textContent = fmtPct(rate * 100);
+      projDuration.textContent = selectedDays >= 365
+        ? (selectedDays / 365).toFixed(selectedDays % 365 === 0 ? 0 : 1) + ' year' + (selectedDays >= 730 ? 's' : '')
+        : selectedDays + ' days';
+    }
+
+    function updateInvestBtn() {
+      const amt = parseFloat(investAmountInput.value) || 0;
+      const valid = amt >= 10 && amt <= balance;
+      investBtn.disabled = !valid;
+      if (amt > 0 && amt < 10) investBtn.innerHTML = '<i class="fas fa-exclamation-circle"></i> Minimum $10';
+      else if (amt > balance) investBtn.innerHTML = '<i class="fas fa-exclamation-circle"></i> Insufficient balance';
+      else investBtn.innerHTML = '<i class="fas fa-chart-line"></i> Invest ' + fmtUsd(amt) + ' · ' + fmtPct(rateForDays(selectedDays) * 100) + '%';
+    }
+
+    function renderInvestments() {
+      if (!investments.length) {
+        invList.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-chart-simple"></i>
+            <p>No investments yet</p>
+            <small>Start your first investment above to begin earning</small>
+          </div>`;
+        return;
+      }
+      invList.innerHTML = investments.map(inv => {
+        const plan = inv.plan || 'bitcoin';
+        const icon = PLAN_ICONS[plan] || 'fa-chart-line';
+        const name = PLAN_NAMES[plan] || plan;
+        const start = new Date(inv.startDate).getTime();
+        const end = new Date(inv.endDate).getTime();
+        const now = Date.now();
+        const total = end - start;
+        const elapsed = Math.min(now - start, total);
+        const pct = Math.max(0, Math.min(100, (elapsed / total) * 100));
+        const isDone = inv.status === 'completed' || now >= end;
+        const days = Math.round(total / 86400000);
+
+        let cdHtml = '';
+        if (isDone) {
+          cdHtml = `
+            <div class="countdown-wrap" style="text-align:center;">
+              <div style="font-size:0.88rem; font-weight:800; color:var(--green);">
+                <i class="fas fa-circle-check"></i> Completed — profit credited
+              </div>
+            </div>`;
+        } else {
+          cdHtml = `
+            <div class="countdown-wrap">
+              <div class="countdown-label">
+                <span>Time remaining</span>
+                <span class="pct">${pct.toFixed(1)}%</span>
+              </div>
+              <div class="countdown-bar"><div style="width:${pct}%"></div></div>
+              <div class="countdown-times" data-end="${end}">
+                <div class="cd-unit"><div class="n" data-unit="d">00</div><div class="l">Days</div></div>
+                <div class="cd-unit"><div class="n" data-unit="h">00</div><div class="l">Hours</div></div>
+                <div class="cd-unit"><div class="n" data-unit="m">00</div><div class="l">Mins</div></div>
+                <div class="cd-unit"><div class="n" data-unit="s">00</div><div class="l">Secs</div></div>
+              </div>
+            </div>`;
+        }
+
+        return `
+          <div class="inv-card">
+            <div class="inv-top">
+              <div class="inv-plan">
+                <div class="pic ${plan}"><i class="fas ${icon}"></i></div>
+                <div>
+                  <h4>${name} · ${days}d</h4>
+                  <p>Started ${new Date(inv.startDate).toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'numeric'})}</p>
+                </div>
+              </div>
+              <span class="inv-status ${isDone ? 'done' : 'active'}">
+                <i class="fas fa-${isDone ? 'circle-check' : 'circle-play'}"></i>
+                ${isDone ? 'Completed' : 'Active'}
+              </span>
+            </div>
+            <div class="inv-grid">
+              <div class="cell"><div class="k">Invested</div><div class="v">${fmtUsd(inv.amount)}</div></div>
+              <div class="cell"><div class="k">Profit</div><div class="v green">+${fmtUsd(inv.profit)}</div></div>
+              <div class="cell"><div class="k">Total payout</div><div class="v">${fmtUsd(inv.amount + inv.profit)}</div></div>
+              <div class="cell"><div class="k">Matures</div><div class="v" style="font-size:0.85rem;">${new Date(inv.endDate).toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'numeric'})}</div></div>
+            </div>
+            ${cdHtml}
+          </div>`;
+      }).join('');
+
+      startCountdowns();
+    }
+
+    function startCountdowns() {
+      if (countdownTimer) clearInterval(countdownTimer);
+      tickCountdowns();
+      countdownTimer = setInterval(tickCountdowns, 1000);
+    }
+
+    function tickCountdowns() {
+      document.querySelectorAll('.countdown-times').forEach(el => {
+        const end = Number(el.dataset.end);
+        const diff = Math.max(0, end - Date.now());
+        const d = Math.floor(diff / 86400000);
+        const h = Math.floor((diff % 86400000) / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+        el.querySelector('[data-unit="d"]').textContent = String(d).padStart(2, '0');
+        el.querySelector('[data-unit="h"]').textContent = String(h).padStart(2, '0');
+        el.querySelector('[data-unit="m"]').textContent = String(m).padStart(2, '0');
+        el.querySelector('[data-unit="s"]').textContent = String(s).padStart(2, '0');
+        if (diff <= 0) {
+          clearInterval(countdownTimer);
+          setTimeout(() => loadData(false), 1500);
+        }
+      });
+    }
+
+    /* =========================================================
+       PLAN SELECTION
+       ========================================================= */
+    document.querySelectorAll('.plan-option').forEach(el => {
+      el.addEventListener('click', () => {
+        document.querySelectorAll('.plan-option').forEach(o => o.classList.remove('selected'));
+        el.classList.add('selected');
+        selectedPlan = el.dataset.plan;
+      });
+    });
+
+    /* =========================================================
+       AMOUNT INPUT
+       ========================================================= */
+    investAmountInput.addEventListener('input', () => {
+      updateProjection();
+      updateInvestBtn();
+    });
+
+    quickAmounts.addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      const amt = btn.dataset.amt;
+      if (amt === 'max') {
+        investAmountInput.value = Math.floor(balance * 100) / 100;
+      } else {
+        investAmountInput.value = amt;
+      }
+      updateProjection();
+      updateInvestBtn();
+    });
+
+    /* =========================================================
+       INVEST
+       ========================================================= */
+    investBtn.addEventListener('click', async () => {
+      const amt = parseFloat(investAmountInput.value) || 0;
+      if (amt < 10) return showToast('Minimum investment is $10', 'error');
+      if (amt > balance) return showToast('Insufficient balance', 'error');
+
+      investBtn.disabled = true;
+      investBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing…';
+
+      try {
+        const data = await api('/api/user/invest', {
+          method: 'POST',
+          body: JSON.stringify({
+            plan: selectedPlan,
+            amount: amt,
+            durationDays: selectedDays
+          })
+        });
+
+        balance = Number(data.balance != null ? data.balance : balance - amt);
+        lastBalanceSnapshot = balance;
+        if (data.investment) investments.unshift(data.investment);
+        render();
+
+        const inv = data.investment || {};
+        const rate = rateForDays(selectedDays);
+        successSummary.innerHTML = `
+          <div class="row"><span class="k">Plan</span><span class="v">${PLAN_NAMES[selectedPlan]}</span></div>
+          <div class="row"><span class="k">Term</span><span class="v">${selectedDays} days</span></div>
+          <div class="row"><span class="k">Invested</span><span class="v">${fmtUsd(amt)}</span></div>
+          <div class="row"><span class="k">Profit (${fmtPct(rate*100)}%)</span><span class="v green">+${fmtUsd(amt * rate)}</span></div>
+          <hr>
+          <div class="row"><span class="k">Total payout</span><span class="v green">${fmtUsd(amt * (1 + rate))}</span></div>
+          <div class="row"><span class="k">Matures on</span><span class="v">${new Date(inv.endDate || Date.now() + selectedDays*86400000).toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'numeric'})}</span></div>
+        `;
+        successModal.classList.add('open');
+
+        investAmountInput.value = '';
+        updateProjection();
+        updateInvestBtn();
+      } catch (err) {
+        showToast(err.message || 'Investment failed', 'error');
+        investBtn.disabled = false;
+        updateInvestBtn();
+      }
+    });
+
+    successClose.addEventListener('click', () => successModal.classList.remove('open'));
+    successModal.addEventListener('click', (e) => { if (e.target === successModal) successModal.classList.remove('open'); });
+
+    /* =========================================================
+       REFRESH / LOGOUT / AUTO-REFRESH
+       ========================================================= */
+    refreshBtn.addEventListener('click', () => loadData(true));
+
+    avatarEl.addEventListener('click', (e) => {
+      e.stopPropagation();
+      logoutPop.classList.toggle('open');
+    });
+    document.addEventListener('click', () => logoutPop.classList.remove('open'));
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('trustInvestToken');
+      localStorage.removeItem('trustInvestUser');
+      window.location.href = 'login.html';
+    });
+
+    window.addEventListener('focus', () => loadData(false));
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) loadData(false);
+    });
+    setInterval(() => loadData(false), 10000);
+
+    /* =========================================================
+       BOOT
+       ========================================================= */
+    renderDurations();
+    loadData(true);
+  </script>
+</body>
+</html>

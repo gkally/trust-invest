@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Withdraw — Trust Invest</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --ink: #0a2540;
+      --ink-soft: #1e3b4b;
+      --muted: #4f6a7c;
+      --muted-2: #8aa3b1;
+      --green: #1e7b4c;
+      --green-dark: #14633a;
+      --green-soft: #e9f3ee;
+      --line: #deede7;
+      --bg: #f6f9fc;
+      --card: #ffffff;
+      --red: #e74c3c;
+      --red-soft: #fdecec;
+      --amber: #f39c12;
+      --amber-soft: #fff8ee;
+      --btc: #f7931a;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(145deg, #f6f9fc 0%, #eef5f1 100%);
+      color: var(--ink);
+      line-height: 1.5;
+      min-height: 100vh;
+      padding: 24px 20px 60px;
+    }
+    .wrap { max-width: 640px; margin: 0 auto; }
+
+    /* TOPBAR */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.92rem;
+      padding: 10px 16px;
+      border-radius: 40px;
+      background: white;
+      border: 1px solid var(--line);
+      transition: 0.2s;
+    }
+    .back-link:hover { border-color: var(--green); color: var(--green); }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .brand i { color: var(--green); font-size: 1.5rem; }
+
+    /* BALANCE BANNER */
+    .balance-banner {
+      background: linear-gradient(140deg, #0a2540 0%, #123e55 65%, #14594a 100%);
+      color: white;
+      border-radius: 26px;
+      padding: 24px 28px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      box-shadow: 0 18px 40px rgba(10,37,64,0.25);
+      position: relative;
+      overflow: hidden;
+    }
+    .balance-banner::before {
+      content: '';
+      position: absolute;
+      width: 280px; height: 280px;
+      background: radial-gradient(circle, rgba(76,219,140,0.18) 0%, transparent 65%);
+      top: -110px; right: -90px;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .balance-banner .lbl {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #9fc0b4;
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .balance-banner .amt {
+      font-size: 2.1rem;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1;
+      position: relative;
+      z-index: 2;
+    }
+    .balance-banner .btc-equiv {
+      position: relative;
+      z-index: 2;
+      font-size: 0.85rem;
+      color: #d7f2e3;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+    .balance-banner .btc-equiv i { color: var(--btc); margin-right: 4px; }
+
+    /* CARD */
+    .card {
+      background: white;
+      border-radius: 28px;
+      padding: 32px 30px;
+      box-shadow: 0 20px 45px rgba(0,50,30,0.07);
+      border: 1px solid var(--line);
+      margin-bottom: 22px;
+    }
+    .card h1 {
+      font-size: 1.55rem;
+      font-weight: 800;
+      letter-spacing: -0.6px;
+      color: var(--ink);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card h1 i { color: var(--green); }
+    .card .sub {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-bottom: 24px;
+    }
+
+    /* FIELD */
+    .field { margin-bottom: 18px; }
+    .field label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+      margin-bottom: 8px;
+    }
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-wrap > .icon {
+      position: absolute;
+      left: 16px;
+      color: var(--muted-2);
+      font-size: 1rem;
+      pointer-events: none;
+    }
+    .input-wrap input {
+      width: 100%;
+      padding: 15px 60px 15px 44px;
+      font-size: 1.1rem;
+      font-family: inherit;
+      font-weight: 700;
+      color: var(--ink);
+      background: #f8fbfa;
+      border: 1.5px solid #d5e6de;
+      border-radius: 16px;
+      outline: none;
+      transition: 0.2s;
+    }
+    .input-wrap input:focus {
+      border-color: var(--green);
+      background: white;
+      box-shadow: 0 0 0 4px rgba(30,123,76,0.1);
+    }
+    .input-wrap input.error { border-color: var(--red); }
+    .input-wrap .suffix {
+      position: absolute;
+      right: 16px;
+      font-weight: 700;
+      color: var(--muted);
+      font-size: 0.9rem;
+      background: var(--green-soft);
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+    .field .hint {
+      font-size: 0.76rem;
+      color: var(--muted-2);
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .field .hint.error { color: var(--red); font-weight: 600; }
+
+    .quick-amounts {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .quick-amounts button {
+      background: var(--green-soft);
+      color: var(--green);
+      border: 1px solid #cde3d9;
+      padding: 7px 16px;
+      border-radius: 40px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .quick-amounts button:hover { background: var(--green); color: white; border-color: var(--green); }
+
+    /* CONVERSION */
+    .conversion-box {
+      background: linear-gradient(135deg, #fff8ee 0%, #fef4e2 100%);
+      border: 1.5px solid #f5e0b8;
+      border-radius: 20px;
+      padding: 18px 20px;
+      margin: 4px 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .conversion-box .left { display: flex; align-items: center; gap: 12px; }
+    .conversion-box .btc-icon {
+      width: 46px; height: 46px;
+      background: var(--btc);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+    .conversion-box .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: #a0722a; font-weight: 700; }
+    .conversion-box .btc-amount {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #7a5218;
+      letter-spacing: -0.5px;
+    }
+    .conversion-box .rate {
+      font-size: 0.72rem;
+      color: #a0722a;
+      font-weight: 600;
+    }
+    .rate-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid #f0d9a8;
+      padding: 6px 12px;
+      border-radius: 40px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #7a5218;
+    }
+    .rate-pill .dot {
+      width: 6px; height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 1.3s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(30,123,76,0.5); }
+      70% { box-shadow: 0 0 0 8px rgba(30,123,76,0); }
+      100% { box-shadow: 0 0 0 0 rgba(30,123,76,0); }
+    }
+
+    /* BUTTON */
+    .btn {
+      width: 100%;
+      padding: 17px;
+      font-family: inherit;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: white;
+      background: var(--green);
+      border: 1.5px solid var(--green);
+      border-radius: 60px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 8px 20px rgba(30,123,76,0.25);
+      transition: 0.2s;
+    }
+    .btn:hover:not(:disabled) {
+      background: var(--green-dark);
+      border-color: var(--green-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 12px 26px rgba(30,123,76,0.35);
+    }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+    .btn-wa {
+      background: #25d366;
+      border-color: #25d366;
+      box-shadow: 0 8px 20px rgba(37,211,102,0.3);
+    }
+    .btn-wa:hover:not(:disabled) { background: #1da851; border-color: #1da851; }
+
+    /* INFO NOTE */
+    .info-note {
+      background: #f0f9f4;
+      border: 1px solid #cde3d9;
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-size: 0.82rem;
+      color: var(--ink-soft);
+      font-weight: 500;
+      margin-top: 18px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      line-height: 1.55;
+    }
+    .info-note i { color: var(--green); margin-top: 2px; flex-shrink: 0; }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10,37,64,0.6);
+      backdrop-filter: blur(5px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: white;
+      border-radius: 26px;
+      width: 100%;
+      max-width: 440px;
+      padding: 30px 28px;
+      box-shadow: 0 30px 70px rgba(0,30,20,0.35);
+      border: 1px solid var(--line);
+      animation: modalIn 0.25s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(14px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 6px;
+    }
+    .modal h2 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .modal h2 i { color: var(--green); }
+    .modal-close {
+      background: #f0f5f2;
+      border: none;
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s;
+      flex-shrink: 0;
+    }
+    .modal-close:hover { background: var(--green-soft); color: var(--green); }
+    .modal p.modal-sub {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .code-summary {
+      background: #f8fbfa;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+    .code-summary .row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      padding: 4px 0;
+    }
+    .code-summary .row .k { color: var(--muted); font-weight: 600; }
+    .code-summary .row .v { color: var(--ink); font-weight: 800; }
+    .code-summary .row .v.green { color: var(--green); }
+
+    .code-input {
+      width: 100%;
+      padding: 16px;
+      font-family: 'Courier New', monospace;
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-align: center;
+      text-transform: uppercase;
+      color: var(--ink);
+      background: #f8fbfa;
+      border: 1.5px solid #d5e6de;
+      border-radius: 14px;
+      outline: none;
+      transition: 0.2s;
+    }
+    .code-input:focus {
+      border-color: var(--green);
+      background: white;
+      box-shadow: 0 0 0 4px rgba(30,123,76,0.1);
+    }
+    .code-input.error {
+      border-color: var(--red);
+      background: var(--red-soft);
+      animation: shake 0.4s;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+    .code-error {
+      display: none;
+      color: var(--red);
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-top: 8px;
+      align-items: center;
+      gap: 6px;
+    }
+    .code-error.show { display: flex; }
+
+    /* ADMIN WHATSAPP BUTTON — hidden until balance confirmed */
+    .admin-code-btn {
+      display: none;
+      width: 100%;
+      margin-top: 12px;
+      padding: 15px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: white;
+      background: #25d366;
+      border: 1.5px solid #25d366;
+      border-radius: 60px;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 8px 20px rgba(37,211,102,0.3);
+      transition: 0.2s;
+      text-decoration: none;
+    }
+    .admin-code-btn.show { display: flex; }
+    .admin-code-btn:hover { background: #1da851; border-color: #1da851; }
+
+    /* SUCCESS MODAL */
+    .success-modal .big-check {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: var(--green-soft);
+      color: var(--green);
+      font-size: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+    .success-modal { text-align: center; }
+    .success-modal h2 { justify-content: center; margin-bottom: 8px; }
+    .success-modal p { margin-bottom: 22px; }
+    .success-modal .summary {
+      background: #f8fbfa;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .success-modal .summary .row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      padding: 5px 0;
+    }
+    .success-modal .summary .row .k { color: var(--muted); font-weight: 600; }
+    .success-modal .summary .row .v { color: var(--ink); font-weight: 800; }
+    .success-modal .summary .row .v.green { color: var(--green); }
+    .success-modal .summary hr { border: none; border-top: 1px dashed var(--line); margin: 8px 0; }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--ink);
+      color: white;
+      padding: 13px 24px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.35s;
+      z-index: 3000;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      max-width: 90vw;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.success { background: var(--green); }
+    .toast.error { background: var(--red); }
+
+    @media (max-width: 520px) {
+      .card { padding: 24px 20px; border-radius: 24px; }
+      .card h1 { font-size: 1.3rem; }
+      .balance-banner .amt { font-size: 1.7rem; }
+      .conversion-box { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <a href="dashboard.html" class="back-link"><i class="fas fa-arrow-left"></i> Dashboard</a>
+      <a href="index.html" class="brand"><i class="fas fa-shield-halved"></i> Trust Invest</a>
+    </div>
+
+    <!-- BALANCE BANNER -->
+    <div class="balance-banner">
+      <div>
+        <div class="lbl"><i class="fas fa-wallet"></i> Available balance</div>
+        <div class="amt" id="availableBalance">$0.00</div>
+        <div class="btc-equiv" id="balanceBtc"><i class="fab fa-bitcoin"></i> 0.00000000 BTC</div>
+      </div>
+    </div>
+
+    <!-- WITHDRAW FORM -->
+    <div class="card">
+      <h1><i class="fas fa-arrow-up-from-bracket"></i> Withdraw Bitcoin</h1>
+      <p class="sub">Cash out to your Bitcoin wallet — fast, secure, and transparent.</p>
+
+      <div class="field">
+        <label for="withdrawAmount">Amount in USD</label>
+        <div class="input-wrap">
+          <i class="fas fa-dollar-sign icon"></i>
+          <input type="number" id="withdrawAmount" placeholder="0.00" min="10" step="0.01" inputmode="decimal">
+          <span class="suffix">USD</span>
+        </div>
+        <div class="quick-amounts" id="quickAmounts">
+          <button type="button" data-amt="50">$50</button>
+          <button type="button" data-amt="100">$100</button>
+          <button type="button" data-amt="250">$250</button>
+          <button type="button" data-amt="500">$500</button>
+          <button type="button" data-amt="max">Max</button>
+        </div>
+        <div class="hint" id="amountHint">
+          <i class="fas fa-circle-info"></i> Minimum withdrawal: $10
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="walletAddress">Recipient Bitcoin wallet address</label>
+        <div class="input-wrap">
+          <i class="fab fa-bitcoin icon"></i>
+          <input type="text" id="walletAddress" placeholder="bc1q… or 1… or 3…" spellcheck="false" autocomplete="off">
+        </div>
+        <div class="hint" id="walletHint">
+          <i class="fas fa-circle-info"></i> Bitcoin network only (BTC). Double-check before submitting.
+        </div>
+      </div>
+
+      <div class="conversion-box">
+        <div class="left">
+          <div class="btc-icon"><i class="fab fa-bitcoin"></i></div>
+          <div>
+            <div class="label">You will receive</div>
+            <div class="btc-amount" id="btcAmount">0.00000000 BTC</div>
+            <div class="rate" id="rateDisplay">Fetching live rate…</div>
+          </div>
+        </div>
+        <div class="rate-pill" id="ratePill">
+          <span class="dot"></span> <span id="ratePillText">live</span>
+        </div>
+      </div>
+
+      <button class="btn" id="withdrawBtn" disabled>
+        <i class="fas fa-arrow-up-from-bracket"></i> Continue
+      </button>
+
+      <div class="info-note">
+        <i class="fas fa-shield-halved"></i>
+        <div>Withdrawals require an activation code for security. After confirming your balance, you'll be asked to enter the code provided by the admin.</div>
+      </div>
+    </div>
+
+    <!-- HELP FOOTER -->
+    <div style="text-align:center; color:var(--muted); font-size:0.82rem; padding:6px 0;">
+      Need help? <a href="https://wa.me/447448774304?text=Hello%20Admin%2C%20I%20need%20help%20with%20a%20Bitcoin%20withdrawal." target="_blank" rel="noopener" style="color:var(--green); font-weight:700; text-decoration:none;">Contact admin on WhatsApp</a>
+    </div>
+  </div>
+
+  <!-- ACTIVATION CODE MODAL -->
+  <div class="modal-overlay" id="codeModal">
+    <div class="modal">
+      <div class="modal-head">
+        <h2><i class="fas fa-shield-halved"></i> Security verification</h2>
+        <button type="button" class="modal-close" id="closeCodeModal" aria-label="Close">
+          <i class="fas fa-xmark"></i>
+        </button>
+      </div>
+      <p class="modal-sub">Enter the activation code provided by the admin to authorise this withdrawal. The code is case-sensitive.</p>
+
+      <div class="code-summary" id="codeSummary"></div>
+
+      <label style="display:block; font-weight:600; font-size:0.88rem; color:var(--ink-soft); margin-bottom:8px;">Activation code</label>
+      <input type="text" class="code-input" id="codeInput" placeholder="•••••••••" maxlength="20" autocomplete="off" spellcheck="false">
+      <div class="code-error" id="codeError">
+        <i class="fas fa-circle-exclamation"></i> Incorrect activation code. Try again or contact admin.
+      </div>
+
+      <button class="btn" id="verifyCodeBtn" style="margin-top:16px;">
+        <i class="fas fa-check"></i> Verify & withdraw
+      </button>
+
+      <!-- Hidden until balance confirmed AND wrong code entered -->
+      <a href="https://wa.me/447448774304?text=Hello%20Admin%2C%20I%20need%20my%20withdrawal%20activation%20code%20for%20Trust%20Invest." target="_blank" rel="noopener" class="admin-code-btn" id="adminCodeBtn">
+        <i class="fab fa-whatsapp"></i> Get activation code from admin
+      </a>
+    </div>
+  </div>
+
+  <!-- SUCCESS / CONFIRM MODAL -->
+  <div class="modal-overlay" id="successModal">
+    <div class="modal success-modal">
+      <div class="big-check"><i class="fas fa-check"></i></div>
+      <h2>Withdrawal in progress</h2>
+      <p>Your withdrawal has been recorded and your balance debited. Please confirm on WhatsApp so the admin can process your payout.</p>
+      <div class="summary" id="successSummary"></div>
+      <a href="#" target="_blank" rel="noopener" class="btn btn-wa" id="confirmWaBtn" style="text-decoration:none;">
+        <i class="fab fa-whatsapp"></i> Confirm on WhatsApp
+      </a>
+      <button class="btn" id="closeSuccessBtn" style="margin-top:10px; background:#eef5f1; color:var(--ink); border-color:#eef5f1; box-shadow:none;">
+        Close
+      </button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    /* =========================================================
+       CONFIG
+       ========================================================= */
+    const ADMIN_WHATSAPP = '447448774304';
+    const MIN_USD = 10;
+    const ACTIVATION_CODE = '338989EBD'; // case-insensitive comparison
+
+    /* =========================================================
+       AUTH
+       ========================================================= */
+    const token = localStorage.getItem('trustInvestToken');
+    let currentUser = {};
+    try { currentUser = JSON.parse(localStorage.getItem('trustInvestUser') || '{}'); } catch(e) {}
+    if (!token) window.location.href = 'login.html';
+
+    /* =========================================================
+       STATE
+       ========================================================= */
+    let btcPrice = 0;
+    let balance = 0;
+    let currentUsd = 0;
+    let currentBtc = 0;
+    let pendingWithdrawal = null; // { usd, btc, address }
+    let balanceConfirmed = false;
+    let rateInterval = null;
+
+    /* =========================================================
+       DOM
+       ========================================================= */
+    const availableBalance = document.getElementById('availableBalance');
+    const balanceBtc = document.getElementById('balanceBtc');
+    const withdrawAmount = document.getElementById('withdrawAmount');
+    const walletAddress = document.getElementById('walletAddress');
+    const amountHint = document.getElementById('amountHint');
+    const walletHint = document.getElementById('walletHint');
+    const btcAmount = document.getElementById('btcAmount');
+    const rateDisplay = document.getElementById('rateDisplay');
+    const ratePillText = document.getElementById('ratePillText');
+    const withdrawBtn = document.getElementById('withdrawBtn');
+    const quickAmounts = document.getElementById('quickAmounts');
+
+    const codeModal = document.getElementById('codeModal');
+    const closeCodeModal = document.getElementById('closeCodeModal');
+    const codeSummary = document.getElementById('codeSummary');
+    const codeInput = document.getElementById('codeInput');
+    const codeError = document.getElementById('codeError');
+    const verifyCodeBtn = document.getElementById('verifyCodeBtn');
+    const adminCodeBtn = document.getElementById('adminCodeBtn');
+
+    const successModal = document.getElementById('successModal');
+    const successSummary = document.getElementById('successSummary');
+    const confirmWaBtn = document.getElementById('confirmWaBtn');
+    const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+
+    const toast = document.getElementById('toast');
+
+    /* =========================================================
+       HELPERS
+       ========================================================= */
+    function fmtUsd(n) {
+      return '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    function fmtBtc(n) {
+      return Number(n || 0).toFixed(8) + ' BTC';
+    }
+    function showToast(msg, type) {
+      toast.textContent = msg;
+      toast.className = 'toast show ' + (type || '');
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => { toast.className = 'toast ' + (type || ''); }, 3200);
+    }
+    async function api(path, opts = {}) {
+      const res = await fetch(path, {
+        ...opts,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
+          'x-user-id': currentUser.id || '',
+          ...(opts.headers || {})
+        }
+      });
+      let data = {};
+      try { data = await res.json(); } catch(e) {}
+      if (!res.ok) throw new Error(data.message || 'Request failed');
+      return data;
+    }
+
+    /* =========================================================
+       LIVE BTC PRICE
+       ========================================================= */
+    async function fetchBtcPrice() {
+      try {
+        const res = await fetch(
+          'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd',
+          { headers: { 'Accept': 'application/json' } }
+        );
+        if (!res.ok) throw new Error('rate fetch failed');
+        const data = await res.json();
+        const p = data && data.bitcoin && data.bitcoin.usd;
+        if (p && p > 0) {
+          btcPrice = p;
+          rateDisplay.textContent = `1 BTC ≈ ${fmtUsd(btcPrice)}`;
+          ratePillText.textContent = 'live';
+          updateConversion();
+          return true;
+        }
+      } catch (e) {
+        console.warn('CoinGecko failed, using fallback:', e);
+      }
+      if (!btcPrice) btcPrice = 63000;
+      rateDisplay.textContent = `1 BTC ≈ ${fmtUsd(btcPrice)} (fallback)`;
+      ratePillText.textContent = 'offline';
+      updateConversion();
+      return false;
+    }
+
+    function updateConversion() {
+      const usd = parseFloat(withdrawAmount.value) || 0;
+      currentUsd = usd;
+      if (usd > 0 && btcPrice > 0) {
+        currentBtc = usd / btcPrice;
+        btcAmount.textContent = fmtBtc(currentBtc);
+      } else {
+        currentBtc = 0;
+        btcAmount.textContent = '0.00000000 BTC';
+      }
+      // Update balance BTC equivalent
+      if (btcPrice > 0) {
+        balanceBtc.innerHTML = `<i class="fab fa-bitcoin"></i> ${fmtBtc(balance / btcPrice)}`;
+      }
+    }
+
+    /* =========================================================
+       LOAD BALANCE
+       ========================================================= */
+    async function loadBalance() {
+      try {
+        const data = await api('/api/user/overview');
+        balance = Number(data.balance) || 0;
+      } catch (err) {
+        console.warn('Overview failed:', err);
+        balance = Number(localStorage.getItem('trustInvestBalanceUsd') || 0);
+      }
+      availableBalance.textContent = fmtUsd(balance);
+      updateConversion();
+      updateButtonState();
+    }
+
+    /* =========================================================
+       VALIDATION & BUTTON STATE
+       ========================================================= */
+    function validateAmount() {
+      const usd = parseFloat(withdrawAmount.value) || 0;
+      if (!usd) return { ok: false, msg: 'Enter an amount' };
+      if (usd < MIN_USD) return { ok: false, msg: `Minimum withdrawal is $${MIN_USD}` };
+      if (usd > balance) return { ok: false, msg: 'Insufficient balance' };
+      return { ok: true, msg: '' };
+    }
+
+    function validateWallet() {
+      const addr = walletAddress.value.trim();
+      if (!addr) return { ok: false, msg: 'Enter your Bitcoin wallet address' };
+      // Basic BTC address shape check
+      const valid = /^(bc1[a-zA-Z0-9]{20,90}|[13][a-km-zA-HJ-NP-Z1-9]{25,34})$/.test(addr);
+      if (!valid) return { ok: false, msg: 'Invalid Bitcoin address format' };
+      return { ok: true, msg: '' };
+    }
+
+    function updateButtonState() {
+      const a = validateAmount();
+      const w = validateWallet();
+      const ready = a.ok && w.ok;
+      withdrawBtn.disabled = !ready;
+    }
+
+    withdrawAmount.addEventListener('input', () => {
+      updateConversion();
+      const a = validateAmount();
+      amountHint.className = 'hint' + (a.ok || !withdrawAmount.value ? '' : ' error');
+      amountHint.innerHTML = a.ok || !withdrawAmount.value
+        ? '<i class="fas fa-circle-info"></i> Minimum withdrawal: $10'
+        : `<i class="fas fa-circle-exclamation"></i> ${a.msg}`;
+      updateButtonState();
+    });
+
+    walletAddress.addEventListener('input', () => {
+      const w = validateWallet();
+      walletHint.className = 'hint' + (w.ok || !walletAddress.value ? '' : ' error');
+      walletHint.innerHTML = w.ok || !walletAddress.value
+        ? '<i class="fas fa-circle-info"></i> Bitcoin network only (BTC). Double-check before submitting.'
+        : `<i class="fas fa-circle-exclamation"></i> ${w.msg}`;
+      updateButtonState();
+    });
+
+    quickAmounts.addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      const amt = btn.dataset.amt;
+      if (amt === 'max') {
+        withdrawAmount.value = Math.floor(balance * 100) / 100;
+      } else {
+        withdrawAmount.value = amt;
+      }
+      withdrawAmount.dispatchEvent(new Event('input'));
+    });
+
+    /* =========================================================
+       WITHDRAW FLOW
+       ========================================================= */
+    withdrawBtn.addEventListener('click', async () => {
+      const a = validateAmount();
+      const w = validateWallet();
+      if (!a.ok) return showToast(a.msg, 'error');
+      if (!w.ok) return showToast(w.msg, 'error');
+
+      withdrawBtn.disabled = true;
+      withdrawBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Confirming balance…';
+
+      // Re-check balance against server (secure withdraw)
+      try {
+        const data = await api('/api/user/overview');
+        balance = Number(data.balance) || 0;
+        availableBalance.textContent = fmtUsd(balance);
+
+        if (currentUsd > balance) {
+          showToast('Insufficient balance', 'error');
+          withdrawBtn.disabled = false;
+          withdrawBtn.innerHTML = '<i class="fas fa-arrow-up-from-bracket"></i> Continue';
+          return;
+        }
+
+        // Balance confirmed — open activation code modal
+        balanceConfirmed = true;
+        pendingWithdrawal = {
+          usd: currentUsd,
+          btc: currentBtc,
+          address: walletAddress.value.trim()
+        };
+
+        openCodeModal();
+        withdrawBtn.disabled = false;
+        withdrawBtn.innerHTML = '<i class="fas fa-arrow-up-from-bracket"></i> Continue';
+      } catch (err) {
+        showToast(err.message || 'Could not verify balance', 'error');
+        withdrawBtn.disabled = false;
+        withdrawBtn.innerHTML = '<i class="fas fa-arrow-up-from-bracket"></i> Continue';
+      }
+    });
+
+    /* =========================================================
+       ACTIVATION CODE MODAL
+       ========================================================= */
+    function openCodeModal() {
+      codeSummary.innerHTML = `
+        <div class="row"><span class="k">Amount</span><span class="v">${fmtUsd(pendingWithdrawal.usd)}</span></div>
+        <div class="row"><span class="k">BTC amount</span><span class="v">${fmtBtc(pendingWithdrawal.btc)}</span></div>
+        <div class="row"><span class="k">To address</span><span class="v" style="font-family:'Courier New',monospace; font-size:0.78rem; word-break:break-all;">${pendingWithdrawal.address.slice(0, 12)}…${pendingWithdrawal.address.slice(-6)}</span></div>
+      `;
+      codeInput.value = '';
+      codeInput.className = 'code-input';
+      codeError.classList.remove('show');
+      adminCodeBtn.classList.remove('show'); // hidden until wrong code
+      codeModal.classList.add('open');
+      setTimeout(() => codeInput.focus(), 150);
+    }
+
+    closeCodeModal.addEventListener('click', () => codeModal.classList.remove('open'));
+    codeModal.addEventListener('click', (e) => { if (e.target === codeModal) codeModal.classList.remove('open'); });
+
+    codeInput.addEventListener('input', () => {
+      codeInput.value = codeInput.value.toUpperCase();
+      codeInput.classList.remove('error');
+      codeError.classList.remove('show');
+    });
+
+    verifyCodeBtn.addEventListener('click', async () => {
+      const entered = codeInput.value.trim().toUpperCase();
+      if (!entered) {
+        codeInput.classList.add('error');
+        return;
+      }
+
+      if (entered !== ACTIVATION_CODE) {
+        codeInput.classList.add('error');
+        codeError.classList.add('show');
+        // Show admin WhatsApp button ONLY after a wrong code (balance already confirmed)
+        if (balanceConfirmed) adminCodeBtn.classList.add('show');
+        return;
+      }
+
+      // Correct code — process withdrawal
+      verifyCodeBtn.disabled = true;
+      verifyCodeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing…';
+
+      try {
+        const data = await api('/api/user/withdraw', {
+          method: 'POST',
+          body: JSON.stringify({
+            amount: pendingWithdrawal.usd,
+            btcAmount: pendingWithdrawal.btc,
+            address: pendingWithdrawal.address,
+            code: entered
+          })
+        });
+
+        // Update local balance
+        balance = Number(data.balance != null ? data.balance : balance - pendingWithdrawal.usd);
+        availableBalance.textContent = fmtUsd(balance);
+        updateConversion();
+
+        codeModal.classList.remove('open');
+        showSuccessModal(data.withdrawal || pendingWithdrawal);
+      } catch (err) {
+        showToast(err.message || 'Withdrawal failed', 'error');
+        verifyCodeBtn.disabled = false;
+        verifyCodeBtn.innerHTML = '<i class="fas fa-check"></i> Verify & withdraw';
+      }
+    });
+
+    /* =========================================================
+       SUCCESS MODAL + WHATSAPP CONFIRMATION
+       ========================================================= */
+    function showSuccessModal(wd) {
+      successSummary.innerHTML = `
+        <div class="row"><span class="k">Amount</span><span class="v">${fmtUsd(wd.usd)}</span></div>
+        <div class="row"><span class="k">BTC amount</span><span class="v">${fmtBtc(wd.btc)}</span></div>
+        <hr>
+        <div class="row"><span class="k">To address</span><span class="v" style="font-family:'Courier New',monospace; font-size:0.76rem; word-break:break-all;">${wd.address}</span></div>
+        <div class="row"><span class="k">Status</span><span class="v green">Pending admin confirmation</span></div>
+      `;
+
+      const message =
+        `🔔 *New Withdrawal Request — Confirmation* 🔔\n\n` +
+        `👤 *Name:* ${currentUser.fullName || 'N/A'}\n` +
+        `📧 *Email:* ${currentUser.email || 'N/A'}\n` +
+        `📱 *Phone:* ${currentUser.phone || 'N/A'}\n\n` +
+        `💰 *Amount (USD):* ${fmtUsd(wd.usd)}\n` +
+        `₿ *Amount (BTC):* ${fmtBtc(wd.btc)}\n` +
+        `📈 *Rate used:* 1 BTC = ${fmtUsd(btcPrice)}\n\n` +
+        `🏦 *Recipient BTC Address:*\n${wd.address}\n\n` +
+        `⏰ *Submitted:* ${new Date().toLocaleString()}\n\n` +
+        `✅ Please process my withdrawal. Thank you!`;
+
+      confirmWaBtn.href = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
+
+      successModal.classList.add('open');
+      verifyCodeBtn.disabled = false;
+      verifyCodeBtn.innerHTML = '<i class="fas fa-check"></i> Verify & withdraw';
+    }
+
+    closeSuccessBtn.addEventListener('click', () => {
+      successModal.classList.remove('open');
+      // Reset form
+      withdrawAmount.value = '';
+      walletAddress.value = '';
+      updateConversion();
+      updateButtonState();
+      loadBalance();
+    });
+
+    successModal.addEventListener('click', (e) => {
+      if (e.target === successModal) {
+        successModal.classList.remove('open');
+        withdrawAmount.value = '';
+        walletAddress.value = '';
+        updateConversion();
+        updateButtonState();
+        loadBalance();
+      }
+    });
+
+    /* =========================================================
+       BOOT
+       ========================================================= */
+    fetchBtcPrice();
+    rateInterval = setInterval(fetchBtcPrice, 60000);
+    loadBalance();
+
+    window.addEventListener('beforeunload', () => {
+      if (rateInterval) clearInterval(rateInterval);
+    });
+  </script>
+</body>
+</html>

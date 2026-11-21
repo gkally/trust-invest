@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — Trust Invest</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --ink: #0a2540;
+      --ink-soft: #1e3b4b;
+      --muted: #4f6a7c;
+      --muted-2: #8aa3b1;
+      --green: #1e7b4c;
+      --green-dark: #14633a;
+      --green-soft: #e9f3ee;
+      --line: #deede7;
+      --bg: #f6f9fc;
+      --card: #ffffff;
+      --btc: #f7931a;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding-bottom: 40px;
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 22px; }
+
+    /* TOPBAR */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 0;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .brand i { color: var(--green); font-size: 1.7rem; }
+    .topbar-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .btn-sm {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 10px 18px;
+      border-radius: 60px;
+      cursor: pointer;
+      text-decoration: none;
+      border: 1.5px solid transparent;
+      transition: 0.2s;
+    }
+    .btn-ghost {
+      background: white;
+      color: var(--ink);
+      border-color: #cbdbe6;
+    }
+    .btn-ghost:hover { border-color: var(--green); color: var(--green); }
+    .btn-green {
+      background: var(--green);
+      color: white;
+      border-color: var(--green);
+      box-shadow: 0 6px 16px rgba(30,123,76,0.25);
+    }
+    .btn-green:hover { background: var(--green-dark); }
+    .btn-wa {
+      background: #25d366;
+      color: white;
+      border-color: #25d366;
+      box-shadow: 0 6px 16px rgba(37,211,102,0.3);
+    }
+    .btn-wa:hover { background: #1da851; }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(140deg, #0a2540 0%, #123e55 60%, #14594a 100%);
+      color: white;
+      border-radius: 40px;
+      padding: 56px 48px;
+      margin: 20px 0 48px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 22px 50px rgba(10, 37, 64, 0.25);
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 480px; height: 480px;
+      background: radial-gradient(circle, rgba(76,219,140,0.2) 0%, transparent 65%);
+      top: -180px; right: -140px;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 340px; height: 340px;
+      background: radial-gradient(circle, rgba(247,147,26,0.15) 0%, transparent 65%);
+      bottom: -160px; left: -100px;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 7px 18px;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 2;
+    }
+    .hero h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1.15;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 2;
+      max-width: 720px;
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, #4cdb8c, #2fa36b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: 1.1rem;
+      color: #cbdbe6;
+      max-width: 640px;
+      position: relative;
+      z-index: 2;
+      margin-bottom: 28px;
+    }
+    .hero-cta {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-cta .btn-sm { padding: 14px 28px; font-size: 0.95rem; }
+    .hero-cta .btn-light {
+      background: white;
+      color: var(--ink);
+      border-color: white;
+    }
+    .hero-cta .btn-light:hover { background: #f0f5f2; }
+
+    /* METRICS */
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 20px;
+      margin-bottom: 56px;
+    }
+    .metric {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 26px 24px;
+      text-align: center;
+      box-shadow: 0 10px 26px rgba(0, 50, 30, 0.05);
+    }
+    .metric .num {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      color: var(--green);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .metric .lbl {
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    /* SECTION */
+    .section { margin-bottom: 56px; }
+    .section-head {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    .section-head .kicker {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--green);
+      font-weight: 700;
+      margin-bottom: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-head h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+    .section-head p {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* STORY */
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: center;
+    }
+    @media (max-width: 800px) { .story-grid { grid-template-columns: 1fr; } }
+    .story-text p {
+      color: var(--ink-soft);
+      font-size: 0.98rem;
+      margin-bottom: 16px;
+    }
+    .story-text p:last-child { margin-bottom: 0; }
+    .story-visual {
+      background: linear-gradient(140deg, #e9f3ee 0%, #f0f9f4 100%);
+      border: 1px solid #cde3d9;
+      border-radius: 30px;
+      padding: 40px 30px;
+      text-align: center;
+    }
+    .story-visual .big-icon {
+      width: 90px; height: 90px;
+      background: white;
+      border-radius: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 2.4rem;
+      color: var(--green);
+      box-shadow: 0 10px 24px rgba(30,123,76,0.15);
+    }
+    .story-visual .quote {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.5;
+      font-style: italic;
+    }
+    .story-visual .author {
+      margin-top: 16px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    /* VALUES */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .value-card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 28px 24px;
+      box-shadow: 0 8px 22px rgba(0, 50, 30, 0.04);
+      transition: 0.2s;
+    }
+    .value-card:hover {
+      transform: translateY(-4px);
+      border-color: #b5d5c7;
+      box-shadow: 0 16px 32px rgba(20,90,50,0.08);
+    }
+    .value-card .ic {
+      width: 52px; height: 52px;
+      background: var(--green-soft);
+      color: var(--green);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 18px;
+    }
+    .value-card h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 8px;
+      letter-spacing: -0.2px;
+    }
+    .value-card p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    /* PLANS RECAP */
+    .plans-recap {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+    .plan-recap {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 24px 22px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .plan-recap .picon {
+      width: 50px; height: 50px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+    .plan-recap .picon.btc { background: #fff3e0; color: var(--btc); }
+    .plan-recap .picon.ai  { background: #eaf4fb; color: #2980b9; }
+    .plan-recap .picon.ads { background: #f4ecf7; color: #9b59b6; }
+    .plan-recap h4 {
+      font-size: 0.98rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+    .plan-recap p {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    /* FAQ */
+    .faq-list { max-width: 780px; margin: 0 auto; }
+    .faq-item {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      transition: 0.2s;
+    }
+    .faq-item.open { border-color: #b5d5c7; }
+    .faq-q {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 22px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--ink);
+      user-select: none;
+    }
+    .faq-q:hover { color: var(--green); }
+    .faq-q i {
+      color: var(--muted-2);
+      font-size: 0.85rem;
+      transition: transform 0.25s;
+      flex-shrink: 0;
+    }
+    .faq-item.open .faq-q i { transform: rotate(180deg); color: var(--green); }
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      padding: 0 22px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.65;
+    }
+    .faq-item.open .faq-a {
+      max-height: 300px;
+      padding: 0 22px 20px;
+    }
+
+    /* CONTACT CTA */
+    .cta-box {
+      background: linear-gradient(135deg, #0a2540 0%, #123e55 100%);
+      border-radius: 32px;
+      padding: 44px 44px;
+      color: white;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+      margin-bottom: 20px;
+    }
+    .cta-box h2 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.6px;
+      margin-bottom: 8px;
+    }
+    .cta-box p {
+      color: #cbdbe6;
+      font-size: 0.98rem;
+      max-width: 480px;
+    }
+    .cta-box .btn-wa { padding: 15px 30px; font-size: 1rem; }
+
+    /* FOOTER */
+    .footer {
+      border-top: 1px solid var(--line);
+      padding: 28px 0 10px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+      gap: 14px;
+    }
+    .footer i { color: var(--green); }
+    .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .footer-links a:hover { color: var(--green); }
+    .disclaimer {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--muted-2);
+      padding: 20px 0 0;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 700px) {
+      .hero { padding: 36px 24px; border-radius: 28px; }
+      .hero h1 { font-size: 2rem; }
+      .cta-box { padding: 30px 24px; }
+      .cta-box h2 { font-size: 1.4rem; }
+      .section-head h2 { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <a href="index.html" class="brand"><i class="fas fa-shield-halved"></i> Trust Invest</a>
+      <div class="topbar-right">
+        <a href="dashboard.html" class="btn-sm btn-ghost"><i class="fas fa-house"></i> Dashboard</a>
+        <a href="register.html" class="btn-sm btn-green"><i class="fas fa-user-plus"></i> Join Us</a>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+      <span class="badge"><i class="fas fa-award"></i> Since 2017 · Trusted by 2,400+ investors</span>
+      <h1>We make <span>investing</span> simple, transparent, and rewarding.</h1>
+      <p>Trust Invest is a modern investment platform offering three diversified strategies — Bitcoin, AI auto-trade, and digital ads — all targeting a 70% return over 60 days.</p>
+      <div class="hero-cta">
+        <a href="register.html" class="btn-sm btn-green"><i class="fas fa-rocket"></i> Start investing</a>
+        <a href="https://wa.me/447448774304?text=Hello%20Admin%2C%20I%20would%20like%20to%20learn%20more%20about%20Trust%20Invest." target="_blank" rel="noopener" class="btn-sm btn-light"><i class="fab fa-whatsapp" style="color:#25d366;"></i> Talk to admin</a>
+      </div>
+    </div>
+
+    <!-- METRICS -->
+    <div class="metrics">
+      <div class="metric">
+        <div class="num">2,400+</div>
+        <div class="lbl">Active investors</div>
+      </div>
+      <div class="metric">
+        <div class="num">70%</div>
+        <div class="lbl">Target return / 60 days</div>
+      </div>
+      <div class="metric">
+        <div class="num">8+</div>
+        <div class="lbl">Years of experience</div>
+      </div>
+      <div class="metric">
+        <div class="num">$4.2M</div>
+        <div class="lbl">Assets under management</div>
+      </div>
+    </div>
+
+    <!-- OUR STORY -->
+    <section class="section">
+      <div class="section-head">
+        <span class="kicker"><i class="fas fa-book-open"></i> Our story</span>
+        <h2>Built on trust, powered by technology</h2>
+        <p>From a small trading desk to a global investment platform.</p>
+      </div>
+      <div class="story-grid">
+        <div class="story-text">
+          <p><b>Trust Invest</b> started in 2017 with a simple belief: everyday people deserve access to the same investment opportunities as institutions — without the complexity, hidden fees, or jargon.</p>
+          <p>What began as a small Bitcoin trading operation has grown into a full-service platform spanning three diversified strategies: Bitcoin mining and holding, AI-driven algorithmic trading, and high-yield digital advertising arbitrage.</p>
+          <p>Every strategy is designed around the same promise: a clear, fixed <b>70% return over 60 days</b>, with your capital returned at maturity. No surprises, no hidden terms.</p>
+          <p>We're transparent about risk, obsessive about security, and committed to making investing feel simple again.</p>
+        </div>
+        <div class="story-visual">
+          <div class="big-icon"><i class="fas fa-shield-halved"></i></div>
+          <div class="quote">"We don't just promise returns — we build the systems that deliver them, with transparency at every step."</div>
+          <div class="author">— The Trust Invest Team</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INVESTMENT PLANS RECAP -->
+    <section class="section">
+      <div class="section-head">
+        <span class="kicker"><i class="fas fa-layer-group"></i> What we offer</span>
+        <h2>Three strategies. One promise.</h2>
+        <p>All plans target 70% return in 60 days.</p>
+      </div>
+      <div class="plans-recap">
+        <div class="plan-recap">
+          <div class="picon btc"><i class="fab fa-bitcoin"></i></div>
+          <div>
+            <h4>Bitcoin</h4>
+            <p>Mining, holding & yield</p>
+          </div>
+        </div>
+        <div class="plan-recap">
+          <div class="picon ai"><i class="fas fa-robot"></i></div>
+          <div>
+            <h4>AI Auto‑Trade</h4>
+            <p>Algorithmic market trading</p>
+          </div>
+        </div>
+        <div class="plan-recap">
+          <div class="picon ads"><i class="fas fa-ad"></i></div>
+          <div>
+            <h4>Digital Ads</h4>
+            <p>High-yield ad arbitrage</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VALUES -->
+    <section class="section">
+      <div class="section-head">
+        <span class="kicker"><i class="fas fa-gem"></i> Our values</span>
+        <h2>What we stand for</h2>
+        <p>The principles behind every decision we make.</p>
+      </div>
+      <div class="values-grid">
+        <div class="value-card">
+          <div class="ic"><i class="fas fa-lock"></i></div>
+          <h3>Security first</h3>
+          <p>Funds are held in insured cold wallets. All transactions are encrypted with 256-bit security and monitored 24/7.</p>
+        </div>
+        <div class="value-card">
+          <div class="ic"><i class="fas fa-eye"></i></div>
+          <h3>Full transparency</h3>
+          <p>Fixed returns, no hidden fees. You always know exactly what you're earning and when you'll be paid.</p>
+        </div>
+        <div class="value-card">
+          <div class="ic"><i class="fas fa-chart-line"></i></div>
+          <h3>Diversified growth</h3>
+          <p>Three independent strategies reduce risk and smooth out volatility, so your portfolio stays resilient.</p>
+        </div>
+        <div class="value-card">
+          <div class="ic"><i class="fas fa-headset"></i></div>
+          <h3>Real human support</h3>
+          <p>Every investor gets direct access to our admin team via WhatsApp — no bots, no tickets, just answers.</p>
+        </div>
+        <div class="value-card">
+          <div class="ic"><i class="fas fa-bolt"></i></div>
+          <h3>Fast payouts</h3>
+          <p>Withdrawals are processed quickly. Once your 60-day cycle ends, your capital and profit are ready.</p>
+        </div>
+        <div class="value-card">
+          <div class="ic"><i class="fas fa-handshake"></i></div>
+          <h3>Trust earned daily</h3>
+          <p>2,400+ investors have trusted us since 2017. We earn that trust through every payout and every conversation.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section">
+      <div class="section-head">
+        <span class="kicker"><i class="fas fa-circle-question"></i> FAQ</span>
+        <h2>Questions, answered</h2>
+        <p>The things investors ask us most.</p>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-q">How does the 70% return in 60 days work? <i class="fas fa-chevron-down"></i></div>
+          <div class="faq-a">When you invest in any of our three plans, your capital is locked for 60 days. At the end of the cycle, you receive your original capital plus a 70% profit — all in one payout.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">What's the minimum investment? <i class="fas fa-chevron-down"></i></div>
+          <div class="faq-a">The minimum deposit is $10. There's no maximum, though large deposits may be reviewed by our team for security.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">How do I deposit funds? <i class="fas fa-chevron-down"></i></div>
+          <div class="faq-a">Deposits are made in Bitcoin (BTC). From your dashboard, click "Top Up", enter your USD amount, and we'll show you a live BTC address with a QR code. Once you've sent the funds, submit the transaction hash and our admin will confirm and credit your account.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">How do I withdraw my earnings? <i class="fas fa-chevron-down"></i></div>
+          <div class="faq-a">When your 60-day cycle ends, your balance is credited to your account. From the dashboard, click "Withdraw" and follow the steps — our admin will process your payout via Bitcoin.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Is my money safe? <i class="fas fa-chevron-down"></i></div>
+          <div class="faq-a">We use insured cold wallets, 256-bit encryption, and 24/7 monitoring. Every withdrawal is manually reviewed by our admin team. Your funds are never pooled with other users' balances.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">How can I contact the admin? <i class="fas fa-chevron-down"></i></div>
+          <div class="faq-a">WhatsApp is our primary support channel. Message us directly at <b>+44 7448 774304</b> for any question, deposit confirmation, or withdrawal request.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <div class="cta-box">
+      <div>
+        <h2>Ready to start earning?</h2>
+        <p>Join thousands of investors growing their wealth with Trust Invest. Start with as little as $10.</p>
+      </div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <a href="register.html" class="btn-sm btn-green" style="padding:15px 30px; font-size:1rem;"><i class="fas fa-user-plus"></i> Create account</a>
+        <a href="https://wa.me/447448774304?text=Hello%20Admin%2C%20I%20would%20like%20to%20invest%20with%20Trust%20Invest." target="_blank" rel="noopener" class="btn-sm btn-wa" style="padding:15px 30px; font-size:1rem;"><i class="fab fa-whatsapp"></i> Chat with admin</a>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <div><i class="fas fa-shield-halved"></i> Trust Invest © 2024</div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="register.html">Join Us</a>
+        <a href="login.html">Login</a>
+        <a href="dashboard.html">Dashboard</a>
+      </div>
+      <div><i class="fas fa-globe"></i> global · regulated · audited</div>
+    </div>
+    <div class="disclaimer">
+      <i class="fas fa-info-circle"></i> All investments carry risk. Past performance does not guarantee future results. The 70% return is targeted over a 60-day period.
+    </div>
+  </div>
+
+  <script>
+    // FAQ accordion
+    document.querySelectorAll('.faq-item').forEach(item => {
+      item.querySelector('.faq-q').addEventListener('click', () => {
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register — Trust Invest</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(145deg, #f6f9fc 0%, #eef5f1 100%);
+      color: #0b1b2b;
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .container { width: 100%; max-width: 520px; }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 28px;
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: #0a2540;
+      text-decoration: none;
+    }
+    .logo-row i { color: #1e7b4c; font-size: 2rem; }
+
+    .card {
+      background: white;
+      border-radius: 32px;
+      padding: 40px 36px;
+      box-shadow: 0 20px 45px rgba(0, 50, 30, 0.07);
+      border: 1px solid #deede7;
+    }
+    .card h1 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: -0.6px;
+      color: #0a2540;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .card .sub {
+      text-align: center;
+      color: #4f6a7c;
+      font-size: 0.95rem;
+      margin-bottom: 30px;
+    }
+
+    .field { margin-bottom: 18px; }
+    .field label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: #1e3b4b;
+      margin-bottom: 8px;
+    }
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-wrap > i.icon {
+      position: absolute;
+      left: 16px;
+      color: #8aa3b1;
+      font-size: 1rem;
+      pointer-events: none;
+    }
+    .input-wrap input {
+      width: 100%;
+      padding: 15px 48px 15px 44px;
+      font-size: 1rem;
+      font-family: inherit;
+      color: #0a2540;
+      background: #f8fbfa;
+      border: 1.5px solid #d5e6de;
+      border-radius: 16px;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    .input-wrap input:focus {
+      border-color: #1e7b4c;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(30, 123, 76, 0.1);
+    }
+    .input-wrap input::placeholder { color: #9db2bf; }
+    .toggle-eye {
+      position: absolute;
+      right: 14px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #8aa3b1;
+      font-size: 1rem;
+      padding: 6px;
+    }
+    .toggle-eye:hover { color: #1e7b4c; }
+
+    .strength-bar {
+      display: flex;
+      gap: 5px;
+      margin-top: 8px;
+    }
+    .strength-bar span {
+      flex: 1;
+      height: 4px;
+      border-radius: 4px;
+      background: #e2ede8;
+      transition: background 0.3s;
+    }
+    .strength-text {
+      font-size: 0.75rem;
+      margin-top: 6px;
+      color: #8aa3b1;
+      font-weight: 500;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 17px;
+      font-family: inherit;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: white;
+      background: #1e7b4c;
+      border: 1.5px solid #1e7b4c;
+      border-radius: 60px;
+      cursor: pointer;
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 8px 20px rgba(30, 123, 76, 0.25);
+      transition: all 0.2s ease;
+    }
+    .btn-submit:hover {
+      background: #14633a;
+      border-color: #14633a;
+      transform: translateY(-1px);
+      box-shadow: 0 12px 26px rgba(30, 123, 76, 0.35);
+    }
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 0.92rem;
+      color: #4f6a7c;
+    }
+    .login-link a {
+      color: #1e7b4c;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .login-link a:hover { text-decoration: underline; }
+
+    .alert {
+      display: none;
+      padding: 13px 16px;
+      border-radius: 14px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 20px;
+      align-items: center;
+      gap: 10px;
+    }
+    .alert.show { display: flex; }
+    .alert-error {
+      background: #fdecec;
+      color: #c0392b;
+      border: 1px solid #f5c6c6;
+    }
+    .alert-success {
+      background: #e9f8f0;
+      color: #1e7b4c;
+      border: 1px solid #bfe6d0;
+    }
+
+    @media (max-width: 520px) {
+      .card { padding: 30px 22px; }
+      body { padding: 24px 14px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="logo-row">
+      <i class="fas fa-shield-halved"></i>
+      <span>Trust Invest</span>
+    </a>
+
+    <div class="card">
+      <h1>Create your account</h1>
+      <p class="sub">Join thousands of investors earning 70% in 60 days.</p>
+
+      <div id="alertBox" class="alert"></div>
+
+      <form id="registerForm" novalidate>
+        <div class="field">
+          <label for="fullName">Full name</label>
+          <div class="input-wrap">
+            <i class="fas fa-user icon"></i>
+            <input type="text" id="fullName" name="fullName" placeholder="John Doe" autocomplete="name" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="email">Email address</label>
+          <div class="input-wrap">
+            <i class="fas fa-envelope icon"></i>
+            <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="phone">Phone number</label>
+          <div class="input-wrap">
+            <i class="fas fa-phone icon"></i>
+            <input type="tel" id="phone" name="phone" placeholder="+44 7000 000000" autocomplete="tel" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="password">Create secure password</label>
+          <div class="input-wrap">
+            <i class="fas fa-lock icon"></i>
+            <input type="password" id="password" name="password" placeholder="At least 8 characters" autocomplete="new-password" required>
+            <button type="button" class="toggle-eye" data-target="password" aria-label="Show password">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="strength-bar" id="strengthBar">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <div class="strength-text" id="strengthText">Password strength</div>
+        </div>
+
+        <div class="field">
+          <label for="confirmPassword">Confirm your password</label>
+          <div class="input-wrap">
+            <i class="fas fa-lock icon"></i>
+            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter password" autocomplete="new-password" required>
+            <button type="button" class="toggle-eye" data-target="confirmPassword" aria-label="Show password">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">
+          <i class="fas fa-user-plus"></i> Create account
+        </button>
+      </form>
+
+      <div class="login-link">
+        Already have an account? <a href="login.html">Login here</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('registerForm');
+    const alertBox = document.getElementById('alertBox');
+    const submitBtn = document.getElementById('submitBtn');
+    const passwordInput = document.getElementById('password');
+    const confirmInput = document.getElementById('confirmPassword');
+    const strengthBar = document.getElementById('strengthBar').children;
+    const strengthText = document.getElementById('strengthText');
+
+    // Show / hide password toggles
+    document.querySelectorAll('.toggle-eye').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = document.getElementById(btn.dataset.target);
+        const isPw = target.type === 'password';
+        target.type = isPw ? 'text' : 'password';
+        btn.innerHTML = isPw ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
+      });
+    });
+
+    // Password strength meter
+    passwordInput.addEventListener('input', () => {
+      const val = passwordInput.value;
+      let score = 0;
+      if (val.length >= 8) score++;
+      if (/[A-Z]/.test(val)) score++;
+      if (/[0-9]/.test(val)) score++;
+      if (/[^A-Za-z0-9]/.test(val)) score++;
+
+      const colors = ['#e2ede8', '#e74c3c', '#f39c12', '#f1c40f', '#1e7b4c'];
+      const labels = ['Password strength', 'Weak', 'Fair', 'Good', 'Strong'];
+      for (let i = 0; i < 4; i++) {
+        strengthBar[i].style.background = i < score ? colors[score] : '#e2ede8';
+      }
+      strengthText.textContent = labels[score];
+      strengthText.style.color = score >= 3 ? '#1e7b4c' : (score === 2 ? '#f39c12' : '#e74c3c');
+    });
+
+    function showAlert(message, type) {
+      alertBox.className = 'alert show alert-' + type;
+      alertBox.innerHTML = '<i class="fas fa-' + (type === 'error' ? 'circle-exclamation' : 'circle-check') + '"></i> ' + message;
+      alertBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function hideAlert() {
+      alertBox.className = 'alert';
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideAlert();
+
+      const fullName = document.getElementById('fullName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const password = passwordInput.value;
+      const confirmPassword = confirmInput.value;
+
+      if (!fullName || !email || !phone || !password || !confirmPassword) {
+        return showAlert('Please fill in all fields.', 'error');
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return showAlert('Please enter a valid email address.', 'error');
+      }
+      if (phone.replace(/\D/g, '').length < 7) {
+        return showAlert('Please enter a valid phone number.', 'error');
+      }
+      if (password.length < 8) {
+        return showAlert('Password must be at least 8 characters.', 'error');
+      }
+      if (password !== confirmPassword) {
+        return showAlert('Passwords do not match.', 'error');
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating account...';
+
+      try {
+        const res = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fullName, email, phone, password })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.message || 'Registration failed.');
+        }
+
+        // Save session token for dashboard
+        if (data.token) {
+          localStorage.setItem('trustInvestToken', data.token);
+          localStorage.setItem('trustInvestUser', JSON.stringify(data.user || {}));
+        }
+
+        showAlert('Registration successful! Redirecting to your dashboard...', 'success');
+        submitBtn.innerHTML = '<i class="fas fa-circle-check"></i> Success!';
+
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 1200);
+
+      } catch (err) {
+        showAlert(err.message || 'Something went wrong. Please try again.', 'error');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create account';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel — Trust Invest</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --ink: #0a2540;
+      --ink-soft: #1e3b4b;
+      --muted: #4f6a7c;
+      --muted-2: #8aa3b1;
+      --green: #1e7b4c;
+      --green-dark: #14633a;
+      --green-soft: #e9f3ee;
+      --line: #deede7;
+      --bg: #f6f9fc;
+      --card: #ffffff;
+      --red: #e74c3c;
+      --red-soft: #fdecec;
+      --amber: #f39c12;
+      --amber-soft: #fff8ee;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 0 22px; }
+
+    /* TOPBAR */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 0;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .brand i { color: var(--green); font-size: 1.7rem; }
+    .brand .badge {
+      background: var(--ink);
+      color: white;
+      font-size: 0.62rem;
+      letter-spacing: 1.5px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+      margin-left: 4px;
+    }
+    .topbar-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .btn-sm {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 10px 18px;
+      border-radius: 60px;
+      cursor: pointer;
+      text-decoration: none;
+      border: 1.5px solid transparent;
+      transition: 0.2s;
+    }
+    .btn-ghost {
+      background: white;
+      color: var(--ink);
+      border-color: #cbdbe6;
+    }
+    .btn-ghost:hover { border-color: var(--green); color: var(--green); }
+    .btn-danger-ghost {
+      background: white;
+      color: var(--red);
+      border-color: #f5c6c6;
+    }
+    .btn-danger-ghost:hover { background: var(--red-soft); }
+    .btn-green {
+      background: var(--green);
+      color: white;
+      border-color: var(--green);
+      box-shadow: 0 6px 16px rgba(30,123,76,0.25);
+    }
+    .btn-green:hover { background: var(--green-dark); }
+
+    /* STATS */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 20px 22px;
+      box-shadow: 0 8px 22px rgba(0, 50, 30, 0.04);
+    }
+    .stat-card .k {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--muted-2);
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .stat-card .v {
+      font-size: 1.9rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      color: var(--ink);
+      line-height: 1;
+    }
+    .stat-card.green .v { color: var(--green); }
+    .stat-card.amber .v { color: var(--amber); }
+    .stat-card.red .v { color: var(--red); }
+
+    /* TABS */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      background: white;
+      padding: 6px;
+      border-radius: 60px;
+      border: 1px solid var(--line);
+      width: fit-content;
+      max-width: 100%;
+    }
+    .tab-btn {
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 11px 22px;
+      border-radius: 50px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+    .tab-btn:hover { color: var(--green); background: var(--green-soft); }
+    .tab-btn.active { background: var(--green); color: white; }
+    .tab-btn .count {
+      background: rgba(255,255,255,0.25);
+      padding: 1px 8px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+    }
+    .tab-btn:not(.active) .count { background: var(--green-soft); color: var(--green); }
+
+    /* SEARCH */
+    .toolbar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .search-box {
+      position: relative;
+      flex: 1 1 280px;
+      max-width: 420px;
+    }
+    .search-box i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted-2);
+      font-size: 0.9rem;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 13px 16px 13px 44px;
+      font-family: inherit;
+      font-size: 0.92rem;
+      color: var(--ink);
+      background: white;
+      border: 1.5px solid var(--line);
+      border-radius: 16px;
+      outline: none;
+      transition: 0.2s;
+    }
+    .search-box input:focus { border-color: var(--green); box-shadow: 0 0 0 4px rgba(30,123,76,0.1); }
+
+    /* TABLE */
+    .table-card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 10px 26px rgba(0, 50, 30, 0.05);
+    }
+    .table-scroll { overflow-x: auto; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      min-width: 820px;
+    }
+    thead th {
+      text-align: left;
+      padding: 15px 16px;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted-2);
+      font-weight: 700;
+      background: #f8fbfa;
+      border-bottom: 1px solid var(--line);
+      white-space: nowrap;
+    }
+    tbody td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #f0f5f2;
+      vertical-align: middle;
+    }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: #fbfdfc; }
+    .user-cell { display: flex; align-items: center; gap: 12px; }
+    .avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--green), #2fa36b);
+      color: white;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+    }
+    .user-cell .name { font-weight: 700; color: var(--ink); }
+    .user-cell .email { font-size: 0.76rem; color: var(--muted); }
+    .mono { font-family: 'Courier New', monospace; font-size: 0.8rem; }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .pill.green { background: var(--green-soft); color: var(--green); }
+    .pill.red { background: var(--red-soft); color: var(--red); }
+    .pill.amber { background: var(--amber-soft); color: var(--amber); }
+    .pill.gray { background: #eef5f1; color: var(--muted); }
+
+    .actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .act-btn {
+      width: 34px; height: 34px;
+      border-radius: 10px;
+      border: 1.5px solid var(--line);
+      background: white;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 0.82rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.15s;
+      position: relative;
+    }
+    .act-btn:hover { transform: translateY(-1px); }
+    .act-btn.green:hover { background: var(--green); color: white; border-color: var(--green); }
+    .act-btn.red:hover { background: var(--red); color: white; border-color: var(--red); }
+    .act-btn.amber:hover { background: var(--amber); color: white; border-color: var(--amber); }
+    .act-btn.blue:hover { background: #2980b9; color: white; border-color: #2980b9; }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+    }
+    .empty-state i { font-size: 2.6rem; color: var(--muted-2); margin-bottom: 14px; display: block; }
+    .empty-state p { font-size: 0.95rem; }
+    .empty-state small { font-size: 0.82rem; color: var(--muted-2); }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 37, 64, 0.55);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: white;
+      border-radius: 26px;
+      width: 100%;
+      max-width: 440px;
+      padding: 30px 28px;
+      box-shadow: 0 30px 70px rgba(0, 30, 20, 0.35);
+      border: 1px solid var(--line);
+      animation: modalIn 0.22s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(14px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 6px;
+    }
+    .modal h2 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .modal-close {
+      background: #f0f5f2;
+      border: none;
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s;
+      flex-shrink: 0;
+    }
+    .modal-close:hover { background: var(--green-soft); color: var(--green); }
+    .modal p.modal-sub {
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-bottom: 20px;
+      line-height: 1.45;
+    }
+    .field { margin-bottom: 16px; }
+    .field label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.84rem;
+      color: var(--ink-soft);
+      margin-bottom: 7px;
+    }
+    .field input, .field select {
+      width: 100%;
+      padding: 13px 16px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--ink);
+      background: #f8fbfa;
+      border: 1.5px solid #d5e6de;
+      border-radius: 14px;
+      outline: none;
+      transition: 0.2s;
+    }
+    .field input:focus, .field select:focus {
+      border-color: var(--green);
+      background: white;
+      box-shadow: 0 0 0 4px rgba(30,123,76,0.1);
+    }
+    .btn-full {
+      width: 100%;
+      padding: 15px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      color: white;
+      background: var(--green);
+      border: 1.5px solid var(--green);
+      border-radius: 60px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 8px 20px rgba(30,123,76,0.25);
+      transition: 0.2s;
+    }
+    .btn-full:hover { background: var(--green-dark); }
+    .btn-full:disabled { opacity: 0.55; cursor: not-allowed; }
+    .btn-full.danger { background: var(--red); border-color: var(--red); box-shadow: 0 8px 20px rgba(231,76,60,0.3); }
+    .btn-full.danger:hover { background: #c0392b; }
+    .btn-full.amber { background: var(--amber); border-color: var(--amber); box-shadow: 0 8px 20px rgba(243,156,18,0.3); }
+    .btn-full.amber:hover { background: #d68910; }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--ink);
+      color: white;
+      padding: 13px 24px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.35s;
+      z-index: 3000;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      max-width: 90vw;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.success { background: var(--green); }
+    .toast.error { background: var(--red); }
+
+    /* LOGIN GATE */
+    .gate {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .gate-card {
+      background: white;
+      border-radius: 28px;
+      padding: 40px 36px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 20px 45px rgba(0, 50, 30, 0.07);
+      border: 1px solid var(--line);
+      text-align: center;
+    }
+    .gate-card .lock {
+      width: 68px; height: 68px;
+      border-radius: 50%;
+      background: var(--green-soft);
+      color: var(--green);
+      font-size: 1.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+    .gate-card h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 6px; }
+    .gate-card p { color: var(--muted); font-size: 0.92rem; margin-bottom: 24px; }
+    .gate-card .field { text-align: left; }
+
+    @media (max-width: 600px) {
+      .tab-btn { padding: 10px 16px; font-size: 0.82rem; }
+      table { font-size: 0.82rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN GATE -->
+  <div id="gate" class="gate" style="display:none;">
+    <div class="gate-card">
+      <div class="lock"><i class="fas fa-lock"></i></div>
+      <h1>Admin Access</h1>
+      <p>Enter the admin key to access the control panel.</p>
+      <div class="field">
+        <label for="adminKeyInput">Admin key</label>
+        <input type="password" id="adminKeyInput" placeholder="Enter admin key" autocomplete="off">
+      </div>
+      <button class="btn-full" id="gateSubmit"><i class="fas fa-arrow-right-to-bracket"></i> Unlock Panel</button>
+      <p style="margin-top:16px; font-size:0.78rem; color:var(--muted-2);">
+        <i class="fas fa-info-circle"></i> Default key: <code>trustadmin2024</code>
+      </p>
+    </div>
+  </div>
+
+  <!-- MAIN PANEL -->
+  <div id="panel" style="display:none;">
+    <div class="wrap">
+      <!-- TOPBAR -->
+      <div class="topbar">
+        <a href="index.html" class="brand">
+          <i class="fas fa-shield-halved"></i> Trust Invest <span class="badge">ADMIN</span>
+        </a>
+        <div class="topbar-right">
+          <a href="https://wa.me/447448774304?text=Hello%20from%20the%20Trust%20Invest%20admin%20panel." target="_blank" rel="noopener" class="btn-sm btn-ghost">
+            <i class="fab fa-whatsapp" style="color:#25d366;"></i> Admin WhatsApp
+          </a>
+          <button class="btn-sm btn-danger-ghost" id="lockBtn">
+            <i class="fas fa-lock"></i> Lock
+          </button>
+        </div>
+      </div>
+
+      <!-- STATS -->
+      <div class="stats-grid">
+        <div class="stat-card green">
+          <div class="k"><i class="fas fa-users"></i> Total users</div>
+          <div class="v" id="statUsers">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="k"><i class="fas fa-user-check"></i> Active</div>
+          <div class="v" id="statActive">0</div>
+        </div>
+        <div class="stat-card amber">
+          <div class="k"><i class="fas fa-hourglass-half"></i> Pending deposits</div>
+          <div class="v" id="statPending">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="k"><i class="fas fa-wallet"></i> Total balance</div>
+          <div class="v" id="statBalance">$0</div>
+        </div>
+        <div class="stat-card red">
+          <div class="k"><i class="fas fa-user-slash"></i> Deactivated</div>
+          <div class="v" id="statDeactivated">0</div>
+        </div>
+      </div>
+
+      <!-- TABS -->
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="users">
+          <i class="fas fa-users"></i> Users <span class="count" id="tabUsersCount">0</span>
+        </button>
+        <button class="tab-btn" data-tab="pending">
+          <i class="fas fa-hourglass-half"></i> Pending Deposits <span class="count" id="tabPendingCount">0</span>
+        </button>
+      </div>
+
+      <!-- TOOLBAR -->
+      <div class="toolbar">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchInput" placeholder="Search by name, email, or phone…">
+        </div>
+        <button class="btn-sm btn-green" id="refreshBtn">
+          <i class="fas fa-rotate"></i> Refresh
+        </button>
+      </div>
+
+      <!-- USERS TABLE -->
+      <div id="usersView">
+        <div class="table-card">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Phone</th>
+                  <th>Balance</th>
+                  <th>Status</th>
+                  <th>Joined</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="usersTbody">
+                <tr><td colspan="6"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i><p>Loading users…</p></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PENDING DEPOSITS -->
+      <div id="pendingView" style="display:none;">
+        <div class="table-card">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Amount (USD)</th>
+                  <th>Amount (BTC)</th>
+                  <th>TX Hash</th>
+                  <th>Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="pendingTbody">
+                <tr><td colspan="6"><div class="empty-state"><i class="fas fa-spinner fa-spin"></i><p>Loading deposits…</p></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CREDIT / DEBIT MODAL -->
+  <div class="modal-overlay" id="amountModal">
+    <div class="modal">
+      <div class="modal-head">
+        <h2 id="amountModalTitle"><i class="fas fa-plus-circle"></i> Credit user</h2>
+        <button class="modal-close" id="closeAmountModal"><i class="fas fa-xmark"></i></button>
+      </div>
+      <p class="modal-sub" id="amountModalSub"></p>
+      <div class="field">
+        <label for="amountInput">Amount (USD)</label>
+        <input type="number" id="amountInput" placeholder="0.00" min="0.01" step="0.01">
+      </div>
+      <div class="field">
+        <label for="amountNote">Note (optional)</label>
+        <input type="text" id="amountNote" placeholder="e.g. Deposit confirmation, bonus…">
+      </div>
+      <button class="btn-full" id="amountSubmit"><i class="fas fa-check"></i> Confirm</button>
+    </div>
+  </div>
+
+  <!-- PASSWORD MODAL -->
+  <div class="modal-overlay" id="pwModal">
+    <div class="modal">
+      <div class="modal-head">
+        <h2><i class="fas fa-key"></i> Change password</h2>
+        <button class="modal-close" id="closePwModal"><i class="fas fa-xmark"></i></button>
+      </div>
+      <p class="modal-sub" id="pwModalSub"></p>
+      <div class="field">
+        <label for="newPwInput">New password</label>
+        <input type="text" id="newPwInput" placeholder="At least 8 characters">
+      </div>
+      <button class="btn-full" id="pwSubmit"><i class="fas fa-check"></i> Update password</button>
+    </div>
+  </div>
+
+  <!-- CONFIRM MODAL -->
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal">
+      <div class="modal-head">
+        <h2 id="confirmTitle"><i class="fas fa-triangle-exclamation"></i> Confirm</h2>
+        <button class="modal-close" id="closeConfirmModal"><i class="fas fa-xmark"></i></button>
+      </div>
+      <p class="modal-sub" id="confirmSub"></p>
+      <button class="btn-full danger" id="confirmYes"><i class="fas fa-check"></i> Yes, proceed</button>
+      <button class="btn-full" style="background:#eef5f1;color:#0a2540;border-color:#eef5f1;box-shadow:none;margin-top:10px;" id="confirmNo">Cancel</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    /* =========================================================
+       CONFIG
+       ========================================================= */
+    const ADMIN_STORAGE_KEY = 'trustInvestAdminKey';
+
+    /* =========================================================
+       STATE
+       ========================================================= */
+    let users = [];
+    let pendingDeposits = [];
+    let activeTab = 'users';
+    let searchQuery = '';
+    let currentAction = null; // { type, userId, ... }
+
+    /* =========================================================
+       DOM
+       ========================================================= */
+    const gate = document.getElementById('gate');
+    const panel = document.getElementById('panel');
+    const adminKeyInput = document.getElementById('adminKeyInput');
+    const gateSubmit = document.getElementById('gateSubmit');
+    const lockBtn = document.getElementById('lockBtn');
+    const toast = document.getElementById('toast');
+
+    const usersTbody = document.getElementById('usersTbody');
+    const pendingTbody = document.getElementById('pendingTbody');
+    const usersView = document.getElementById('usersView');
+    const pendingView = document.getElementById('pendingView');
+    const searchInput = document.getElementById('searchInput');
+    const refreshBtn = document.getElementById('refreshBtn');
+
+    const amountModal = document.getElementById('amountModal');
+    const closeAmountModal = document.getElementById('closeAmountModal');
+    const amountModalTitle = document.getElementById('amountModalTitle');
+    const amountModalSub = document.getElementById('amountModalSub');
+    const amountInput = document.getElementById('amountInput');
+    const amountNote = document.getElementById('amountNote');
+    const amountSubmit = document.getElementById('amountSubmit');
+
+    const pwModal = document.getElementById('pwModal');
+    const closePwModal = document.getElementById('closePwModal');
+    const pwModalSub = document.getElementById('pwModalSub');
+    const newPwInput = document.getElementById('newPwInput');
+    const pwSubmit = document.getElementById('pwSubmit');
+
+    const confirmModal = document.getElementById('confirmModal');
+    const closeConfirmModal = document.getElementById('closeConfirmModal');
+    const confirmTitle = document.getElementById('confirmTitle');
+    const confirmSub = document.getElementById('confirmSub');
+    const confirmYes = document.getElementById('confirmYes');
+    const confirmNo = document.getElementById('confirmNo');
+
+    /* =========================================================
+       HELPERS
+       ========================================================= */
+    function adminKey() {
+      return localStorage.getItem(ADMIN_STORAGE_KEY) || '';
+    }
+    function fmtUsd(n) {
+      return '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    function fmtBtc(n) {
+      return Number(n || 0).toFixed(8) + ' BTC';
+    }
+    function fmtDate(d) {
+      if (!d) return '—';
+      const dt = new Date(d);
+      if (isNaN(dt)) return '—';
+      return dt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+    function initials(name) {
+      return (name || 'U').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    }
+    function showToast(msg, type) {
+      toast.textContent = msg;
+      toast.className = 'toast show ' + (type || '');
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => { toast.className = 'toast ' + (type || ''); }, 3200);
+    }
+    function esc(str) {
+      return String(str == null ? '' : str).replace(/[&<>"']/g, c => ({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+      }[c]));
+    }
+
+    async function api(path, opts = {}) {
+      const res = await fetch(path, {
+        ...opts,
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-key': adminKey(),
+          ...(opts.headers || {})
+        }
+      });
+      let data = {};
+      try { data = await res.json(); } catch (e) {}
+      if (!res.ok) {
+        if (res.status === 401) {
+          lockPanel();
+          throw new Error(data.message || 'Unauthorized');
+        }
+        throw new Error(data.message || 'Request failed');
+      }
+      return data;
+    }
+
+    /* =========================================================
+       AUTH GATE
+       ========================================================= */
+    function showGate() {
+      gate.style.display = 'flex';
+      panel.style.display = 'none';
+    }
+    function hideGate() {
+      gate.style.display = 'none';
+      panel.style.display = 'block';
+    }
+    function lockPanel() {
+      localStorage.removeItem(ADMIN_STORAGE_KEY);
+      showGate();
+    }
+
+    gateSubmit.addEventListener('click', async () => {
+      const key = adminKeyInput.value.trim();
+      if (!key) { showToast('Enter the admin key', 'error'); return; }
+      gateSubmit.disabled = true;
+      gateSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying…';
+      try {
+        const res = await fetch('/api/admin/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ key })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Invalid admin key');
+        localStorage.setItem(ADMIN_STORAGE_KEY, key);
+        hideGate();
+        loadAll();
+      } catch (err) {
+        showToast(err.message || 'Invalid admin key', 'error');
+      } finally {
+        gateSubmit.disabled = false;
+        gateSubmit.innerHTML = '<i class="fas fa-arrow-right-to-bracket"></i> Unlock Panel';
+      }
+    });
+    adminKeyInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') gateSubmit.click();
+    });
+    lockBtn.addEventListener('click', lockPanel);
+
+    /* =========================================================
+       LOAD DATA
+       ========================================================= */
+    async function loadAll() {
+      await Promise.all([loadUsers(), loadPending()]);
+      render();
+    }
+
+    async function loadUsers() {
+      try {
+        const data = await api('/api/admin/users');
+        users = data.users || [];
+      } catch (err) {
+        showToast(err.message, 'error');
+        users = [];
+      }
+    }
+
+    async function loadPending() {
+      try {
+        const data = await api('/api/admin/pending-deposits');
+        pendingDeposits = data.deposits || [];
+      } catch (err) {
+        pendingDeposits = [];
+      }
+    }
+
+    /* =========================================================
+       RENDER
+       ========================================================= */
+    function render() {
+      renderStats();
+      renderTabs();
+      if (activeTab === 'users') renderUsers();
+      else renderPending();
+    }
+
+    function renderStats() {
+      const total = users.length;
+      const active = users.filter(u => u.active !== false).length;
+      const deact = users.filter(u => u.active === false).length;
+      const balance = users.reduce((s, u) => s + (Number(u.balance) || 0), 0);
+      document.getElementById('statUsers').textContent = total;
+      document.getElementById('statActive').textContent = active;
+      document.getElementById('statDeactivated').textContent = deact;
+      document.getElementById('statPending').textContent = pendingDeposits.length;
+      document.getElementById('statBalance').textContent = fmtUsd(balance);
+      document.getElementById('tabUsersCount').textContent = total;
+      document.getElementById('tabPendingCount').textContent = pendingDeposits.length;
+    }
+
+    function renderTabs() {
+      usersView.style.display = activeTab === 'users' ? 'block' : 'none';
+      pendingView.style.display = activeTab === 'pending' ? 'block' : 'none';
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.tab === activeTab);
+      });
+    }
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        activeTab = btn.dataset.tab;
+        render();
+      });
+    });
+
+    function filteredUsers() {
+      const q = searchQuery.toLowerCase().trim();
+      if (!q) return users;
+      return users.filter(u =>
+        (u.fullName || '').toLowerCase().includes(q) ||
+        (u.email || '').toLowerCase().includes(q) ||
+        (u.phone || '').toLowerCase().includes(q)
+      );
+    }
+
+    function renderUsers() {
+      const list = filteredUsers();
+      if (!list.length) {
+        usersTbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><i class="fas fa-users"></i><p>No users found</p><small>${searchQuery ? 'Try a different search' : 'Users will appear after registration'}</small></div></td></tr>`;
+        return;
+      }
+      usersTbody.innerHTML = list.map(u => {
+        const active = u.active !== false;
+        return `
+          <tr>
+            <td>
+              <div class="user-cell">
+                <div class="avatar">${esc(initials(u.fullName))}</div>
+                <div>
+                  <div class="name">${esc(u.fullName || 'Unknown')}</div>
+                  <div class="email">${esc(u.email || '')}</div>
+                </div>
+              </div>
+            </td>
+            <td class="mono">${esc(u.phone || '—')}</td>
+            <td><b>${fmtUsd(u.balance)}</b></td>
+            <td>
+              <span class="pill ${active ? 'green' : 'red'}">
+                <i class="fas fa-${active ? 'circle-check' : 'circle-xmark'}"></i>
+                ${active ? 'Active' : 'Deactivated'}
+              </span>
+            </td>
+            <td>${fmtDate(u.createdAt)}</td>
+            <td>
+              <div class="actions">
+                <button class="act-btn green" title="Credit" data-act="credit" data-id="${u.id}"><i class="fas fa-plus"></i></button>
+                <button class="act-btn amber" title="Debit" data-act="debit" data-id="${u.id}"><i class="fas fa-minus"></i></button>
+                <button class="act-btn blue" title="Change password" data-act="password" data-id="${u.id}"><i class="fas fa-key"></i></button>
+                <button class="act-btn ${active ? 'amber' : 'green'}" title="${active ? 'Deactivate' : 'Activate'}" data-act="toggle" data-id="${u.id}"><i class="fas fa-${active ? 'user-slash' : 'user-check'}"></i></button>
+                <button class="act-btn red" title="Remove" data-act="remove" data-id="${u.id}"><i class="fas fa-trash"></i></button>
+              </div>
+            </td>
+          </tr>`;
+      }).join('');
+
+      usersTbody.querySelectorAll('.act-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.id;
+          const act = btn.dataset.act;
+          const user = users.find(u => u.id === id);
+          if (!user) return;
+          if (act === 'credit') openAmountModal('credit', user);
+          if (act === 'debit') openAmountModal('debit', user);
+          if (act === 'password') openPwModal(user);
+          if (act === 'toggle') openConfirm({
+            title: user.active !== false ? 'Deactivate user' : 'Activate user',
+            sub: user.active !== false
+              ? `Deactivate ${user.fullName}? They will not be able to log in.`
+              : `Activate ${user.fullName}? They will be able to log in again.`,
+            danger: user.active !== false,
+            onYes: async () => {
+              await api(`/api/admin/users/${id}/toggle`, { method: 'POST' });
+              await loadAll();
+              showToast(user.active !== false ? 'User deactivated' : 'User activated', 'success');
+            }
+          });
+          if (act === 'remove') openConfirm({
+            title: 'Remove user',
+            sub: `Permanently remove ${user.fullName}? This cannot be undone.`,
+            danger: true,
+            onYes: async () => {
+              await api(`/api/admin/users/${id}`, { method: 'DELETE' });
+              await loadAll();
+              showToast('User removed', 'success');
+            }
+          });
+        });
+      });
+    }
+
+    function renderPending() {
+      if (!pendingDeposits.length) {
+        pendingTbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><i class="fas fa-hourglass-half"></i><p>No pending deposits</p><small>Deposits awaiting confirmation will appear here</small></div></td></tr>`;
+        return;
+      }
+      pendingTbody.innerHTML = pendingDeposits.map(d => {
+        const u = d.user || {};
+        return `
+          <tr>
+            <td>
+              <div class="user-cell">
+                <div class="avatar">${esc(initials(u.fullName))}</div>
+                <div>
+                  <div class="name">${esc(u.fullName || 'Unknown')}</div>
+                  <div class="email">${esc(u.email || '')}</div>
+                </div>
+              </div>
+            </td>
+            <td><b>${fmtUsd(d.usd)}</b></td>
+            <td class="mono">${esc(fmtBtc(d.btc))}</td>
+            <td class="mono" style="max-width:180px; overflow:hidden; text-overflow:ellipsis;" title="${esc(d.txHash || '')}">${esc(d.txHash || '—')}</td>
+            <td>${fmtDate(d.createdAt)}</td>
+            <td>
+              <div class="actions">
+                <button class="act-btn green" title="Confirm deposit" data-act="confirm" data-id="${d.id}"><i class="fas fa-check"></i></button>
+                <button class="act-btn red" title="Decline deposit" data-act="decline" data-id="${d.id}"><i class="fas fa-xmark"></i></button>
+              </div>
+            </td>
+          </tr>`;
+      }).join('');
+
+      pendingTbody.querySelectorAll('.act-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.id;
+          const act = btn.dataset.act;
+          const dep = pendingDeposits.find(d => d.id === id);
+          if (!dep) return;
+          if (act === 'confirm') {
+            openConfirm({
+              title: 'Confirm deposit',
+              sub: `Credit ${fmtUsd(dep.usd)} to ${dep.user && dep.user.fullName || 'user'}?`,
+              danger: false,
+              onYes: async () => {
+                await api(`/api/admin/pending-deposits/${id}/confirm`, { method: 'POST' });
+                await loadAll();
+                showToast('Deposit confirmed and credited', 'success');
+              }
+            });
+          }
+          if (act === 'decline') {
+            openConfirm({
+              title: 'Decline deposit',
+              sub: `Decline this ${fmtUsd(dep.usd)} deposit?`,
+              danger: true,
+              onYes: async () => {
+                await api(`/api/admin/pending-deposits/${id}/decline`, { method: 'POST' });
+                await loadAll();
+                showToast('Deposit declined', 'success');
+              }
+            });
+          }
+        });
+      });
+    }
+
+    /* =========================================================
+       AMOUNT MODAL (credit / debit)
+       ========================================================= */
+    function openAmountModal(type, user) {
+      currentAction = { type, userId: user.id };
+      amountModalTitle.innerHTML = type === 'credit'
+        ? '<i class="fas fa-plus-circle" style="color:var(--green);"></i> Credit user'
+        : '<i class="fas fa-minus-circle" style="color:var(--amber);"></i> Debit user';
+      amountModalSub.textContent = `${type === 'credit' ? 'Add funds to' : 'Remove funds from'} ${user.fullName} (current balance: ${fmtUsd(user.balance)}).`;
+      amountInput.value = '';
+      amountNote.value = '';
+      amountModal.classList.add('open');
+      setTimeout(() => amountInput.focus(), 120);
+    }
+
+    closeAmountModal.addEventListener('click', () => amountModal.classList.remove('open'));
+    amountModal.addEventListener('click', (e) => { if (e.target === amountModal) amountModal.classList.remove('open'); });
+
+    amountSubmit.addEventListener('click', async () => {
+      const amt = parseFloat(amountInput.value);
+      if (!amt || amt <= 0) { showToast('Enter a valid amount', 'error'); return; }
+      if (!currentAction) return;
+      amountSubmit.disabled = true;
+      amountSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing…';
+      try {
+        await api(`/api/admin/users/${currentAction.userId}/${currentAction.type}`, {
+          method: 'POST',
+          body: JSON.stringify({ amount: amt, note: amountNote.value.trim() })
+        });
+        amountModal.classList.remove('open');
+        await loadAll();
+        showToast(`${currentAction.type === 'credit' ? 'Credited' : 'Debited'} ${fmtUsd(amt)}`, 'success');
+      } catch (err) {
+        showToast(err.message, 'error');
+      } finally {
+        amountSubmit.disabled = false;
+        amountSubmit.innerHTML = '<i class="fas fa-check"></i> Confirm';
+      }
+    });
+
+    /* =========================================================
+       PASSWORD MODAL
+       ========================================================= */
+    function openPwModal(user) {
+      currentAction = { type: 'password', userId: user.id };
+      pwModalSub.textContent = `Set a new password for ${user.fullName} (${user.email}).`;
+      newPwInput.value = '';
+      pwModal.classList.add('open');
+      setTimeout(() => newPwInput.focus(), 120);
+    }
+
+    closePwModal.addEventListener('click', () => pwModal.classList.remove('open'));
+    pwModal.addEventListener('click', (e) => { if (e.target === pwModal) pwModal.classList.remove('open'); });
+
+    pwSubmit.addEventListener('click', async () => {
+      const pw = newPwInput.value;
+      if (!pw || pw.length < 8) { showToast('Password must be at least 8 characters', 'error'); return; }
+      if (!currentAction) return;
+      pwSubmit.disabled = true;
+      pwSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating…';
+      try {
+        await api(`/api/admin/users/${currentAction.userId}/password`, {
+          method: 'POST',
+          body: JSON.stringify({ password: pw })
+        });
+        pwModal.classList.remove('open');
+        showToast('Password updated', 'success');
+      } catch (err) {
+        showToast(err.message, 'error');
+      } finally {
+        pwSubmit.disabled = false;
+        pwSubmit.innerHTML = '<i class="fas fa-check"></i> Update password';
+      }
+    });
+
+    /* =========================================================
+       CONFIRM MODAL
+       ========================================================= */
+    function openConfirm({ title, sub, danger, onYes }) {
+      confirmTitle.innerHTML = `<i class="fas fa-triangle-exclamation" style="color:${danger ? 'var(--red)' : 'var(--green)'};"></i> ${esc(title)}`;
+      confirmSub.textContent = sub;
+      confirmYes.className = 'btn-full' + (danger ? ' danger' : '');
+      confirmYes.innerHTML = '<i class="fas fa-check"></i> Yes, proceed';
+      currentAction = { type: 'confirm', onYes };
+      confirmModal.classList.add('open');
+    }
+
+    closeConfirmModal.addEventListener('click', () => confirmModal.classList.remove('open'));
+    confirmNo.addEventListener('click', () => confirmModal.classList.remove('open'));
+    confirmModal.addEventListener('click', (e) => { if (e.target === confirmModal) confirmModal.classList.remove('open'); });
+
+    confirmYes.addEventListener('click', async () => {
+      if (!currentAction || !currentAction.onYes) return;
+      confirmYes.disabled = true;
+      confirmYes.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Working…';
+      try {
+        await currentAction.onYes();
+        confirmModal.classList.remove('open');
+      } catch (err) {
+        showToast(err.message, 'error');
+      } finally {
+        confirmYes.disabled = false;
+        confirmYes.innerHTML = '<i class="fas fa-check"></i> Yes, proceed';
+      }
+    });
+
+    /* =========================================================
+       SEARCH + REFRESH
+       ========================================================= */
+    searchInput.addEventListener('input', () => {
+      searchQuery = searchInput.value;
+      if (activeTab === 'users') renderUsers();
+    });
+    refreshBtn.addEventListener('click', async () => {
+      refreshBtn.disabled = true;
+      refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Refreshing…';
+      await loadAll();
+      refreshBtn.disabled = false;
+      refreshBtn.innerHTML = '<i class="fas fa-rotate"></i> Refresh';
+      showToast('Data refreshed', 'success');
+    });
+
+    /* =========================================================
+       BOOT
+       ========================================================= */
+    (function boot() {
+      if (adminKey()) {
+        hideGate();
+        loadAll();
+      } else {
+        showGate();
+      }
+    })();
+  </script>
+</body>
+</html>

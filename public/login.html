@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — Trust Invest</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(145deg, #f6f9fc 0%, #eef5f1 100%);
+      color: #0b1b2b;
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .container { width: 100%; max-width: 520px; }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 28px;
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: #0a2540;
+      text-decoration: none;
+    }
+    .logo-row i { color: #1e7b4c; font-size: 2rem; }
+
+    .card {
+      background: white;
+      border-radius: 32px;
+      padding: 40px 36px;
+      box-shadow: 0 20px 45px rgba(0, 50, 30, 0.07);
+      border: 1px solid #deede7;
+    }
+    .card h1 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: -0.6px;
+      color: #0a2540;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .card .sub {
+      text-align: center;
+      color: #4f6a7c;
+      font-size: 0.95rem;
+      margin-bottom: 30px;
+    }
+
+    .field { margin-bottom: 18px; }
+    .field label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: #1e3b4b;
+      margin-bottom: 8px;
+    }
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-wrap > i.icon {
+      position: absolute;
+      left: 16px;
+      color: #8aa3b1;
+      font-size: 1rem;
+      pointer-events: none;
+    }
+    .input-wrap input {
+      width: 100%;
+      padding: 15px 48px 15px 44px;
+      font-size: 1rem;
+      font-family: inherit;
+      color: #0a2540;
+      background: #f8fbfa;
+      border: 1.5px solid #d5e6de;
+      border-radius: 16px;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    .input-wrap input:focus {
+      border-color: #1e7b4c;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(30, 123, 76, 0.1);
+    }
+    .input-wrap input::placeholder { color: #9db2bf; }
+    .toggle-eye {
+      position: absolute;
+      right: 14px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #8aa3b1;
+      font-size: 1rem;
+      padding: 6px;
+    }
+    .toggle-eye:hover { color: #1e7b4c; }
+
+    .row-between {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 4px 0 22px;
+    }
+    .remember {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.87rem;
+      color: #4f6a7c;
+      font-weight: 500;
+      cursor: pointer;
+      user-select: none;
+    }
+    .remember input {
+      width: 16px;
+      height: 16px;
+      accent-color: #1e7b4c;
+      cursor: pointer;
+    }
+    .forgot-btn {
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: 0.87rem;
+      font-weight: 700;
+      color: #1e7b4c;
+      cursor: pointer;
+      padding: 4px 0;
+    }
+    .forgot-btn:hover { text-decoration: underline; }
+
+    .btn-submit {
+      width: 100%;
+      padding: 17px;
+      font-family: inherit;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: white;
+      background: #1e7b4c;
+      border: 1.5px solid #1e7b4c;
+      border-radius: 60px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 8px 20px rgba(30, 123, 76, 0.25);
+      transition: all 0.2s ease;
+    }
+    .btn-submit:hover {
+      background: #14633a;
+      border-color: #14633a;
+      transform: translateY(-1px);
+      box-shadow: 0 12px 26px rgba(30, 123, 76, 0.35);
+    }
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .register-link {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 0.92rem;
+      color: #4f6a7c;
+    }
+    .register-link a {
+      color: #1e7b4c;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .register-link a:hover { text-decoration: underline; }
+
+    .alert {
+      display: none;
+      padding: 13px 16px;
+      border-radius: 14px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 20px;
+      align-items: center;
+      gap: 10px;
+    }
+    .alert.show { display: flex; }
+    .alert-error {
+      background: #fdecec;
+      color: #c0392b;
+      border: 1px solid #f5c6c6;
+    }
+    .alert-success {
+      background: #e9f8f0;
+      color: #1e7b4c;
+      border: 1px solid #bfe6d0;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 37, 64, 0.55);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: white;
+      border-radius: 28px;
+      width: 100%;
+      max-width: 440px;
+      padding: 32px 30px;
+      box-shadow: 0 30px 70px rgba(0, 30, 20, 0.3);
+      border: 1px solid #deede7;
+      animation: modalIn 0.25s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(16px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 6px;
+    }
+    .modal h2 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+      color: #0a2540;
+    }
+    .modal-close {
+      background: #f0f5f2;
+      border: none;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      cursor: pointer;
+      color: #4f6a7c;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s;
+    }
+    .modal-close:hover { background: #e2ede8; color: #1e7b4c; }
+    .modal p.modal-sub {
+      color: #4f6a7c;
+      font-size: 0.9rem;
+      margin-bottom: 22px;
+      line-height: 1.45;
+    }
+    .modal .btn-submit { margin-top: 8px; background: #25d366; border-color: #25d366; box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3); }
+    .modal .btn-submit:hover { background: #1da851; border-color: #1da851; }
+    .modal .hint {
+      font-size: 0.78rem;
+      color: #8aa3b1;
+      text-align: center;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 520px) {
+      .card { padding: 30px 22px; }
+      body { padding: 24px 14px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="logo-row">
+      <i class="fas fa-shield-halved"></i>
+      <span>Trust Invest</span>
+    </a>
+
+    <div class="card">
+      <h1>Welcome back</h1>
+      <p class="sub">Login to access your investment dashboard.</p>
+
+      <div id="alertBox" class="alert"></div>
+
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label for="identifier">Email or phone number</label>
+          <div class="input-wrap">
+            <i class="fas fa-user icon"></i>
+            <input type="text" id="identifier" name="identifier" placeholder="you@example.com or +44..." autocomplete="username" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="input-wrap">
+            <i class="fas fa-lock icon"></i>
+            <input type="password" id="password" name="password" placeholder="Enter your password" autocomplete="current-password" required>
+            <button type="button" class="toggle-eye" id="togglePw" aria-label="Show password">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="row-between">
+          <label class="remember">
+            <input type="checkbox" id="rememberMe"> Remember me
+          </label>
+          <button type="button" class="forgot-btn" id="forgotBtn">
+            <i class="fas fa-key" style="margin-right:4px;"></i> Forgot password?
+          </button>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">
+          <i class="fas fa-arrow-right-to-bracket"></i> Login
+        </button>
+      </form>
+
+      <div class="register-link">
+        Don't have an account? <a href="register.html">Create one</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Forgot Password Modal -->
+  <div class="modal-overlay" id="forgotModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="forgotTitle">
+      <div class="modal-head">
+        <h2 id="forgotTitle">Reset password</h2>
+        <button type="button" class="modal-close" id="closeModal" aria-label="Close">
+          <i class="fas fa-xmark"></i>
+        </button>
+      </div>
+      <p class="modal-sub">
+        Enter your account email and phone number. We'll open WhatsApp so you can send the reset request directly to the admin.
+      </p>
+
+      <div class="field">
+        <label for="resetEmail">Email address</label>
+        <div class="input-wrap">
+          <i class="fas fa-envelope icon"></i>
+          <input type="email" id="resetEmail" placeholder="you@example.com" autocomplete="email">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="resetPhone">Phone number</label>
+        <div class="input-wrap">
+          <i class="fas fa-phone icon"></i>
+          <input type="tel" id="resetPhone" placeholder="+44 7000 000000" autocomplete="tel">
+        </div>
+      </div>
+
+      <button type="button" class="btn-submit" id="openWhatsAppBtn">
+        <i class="fab fa-whatsapp"></i> Send reset request via WhatsApp
+      </button>
+      <div class="hint">You'll be redirected to WhatsApp with a prefilled message.</div>
+    </div>
+  </div>
+
+  <script>
+    const ADMIN_WHATSAPP = '447448774304';
+
+    const loginForm = document.getElementById('loginForm');
+    const alertBox = document.getElementById('alertBox');
+    const submitBtn = document.getElementById('submitBtn');
+    const passwordInput = document.getElementById('password');
+    const identifierInput = document.getElementById('identifier');
+    const rememberMe = document.getElementById('rememberMe');
+
+    const forgotBtn = document.getElementById('forgotBtn');
+    const forgotModal = document.getElementById('forgotModal');
+    const closeModal = document.getElementById('closeModal');
+    const openWhatsAppBtn = document.getElementById('openWhatsAppBtn');
+    const resetEmail = document.getElementById('resetEmail');
+    const resetPhone = document.getElementById('resetPhone');
+
+    // Prefill remember-me email/identifier if previously saved
+    const savedIdentifier = localStorage.getItem('trustInvestRemember');
+    if (savedIdentifier) {
+      identifierInput.value = savedIdentifier;
+      rememberMe.checked = true;
+    }
+
+    // Show / hide password
+    document.getElementById('togglePw').addEventListener('click', () => {
+      const isPw = passwordInput.type === 'password';
+      passwordInput.type = isPw ? 'text' : 'password';
+      document.getElementById('togglePw').innerHTML = isPw
+        ? '<i class="fas fa-eye-slash"></i>'
+        : '<i class="fas fa-eye"></i>';
+    });
+
+    function showAlert(message, type) {
+      alertBox.className = 'alert show alert-' + type;
+      alertBox.innerHTML = '<i class="fas fa-' + (type === 'error' ? 'circle-exclamation' : 'circle-check') + '"></i> ' + message;
+      alertBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    function hideAlert() { alertBox.className = 'alert'; }
+
+    // Login submit
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideAlert();
+
+      const identifier = identifierInput.value.trim();
+      const password = passwordInput.value;
+
+      if (!identifier || !password) {
+        return showAlert('Please enter your email/phone and password.', 'error');
+      }
+
+      // Basic client-side sanity: is it an email or a phone?
+      const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier);
+      const isPhone = /^[+]?[\d\s\-()]{7,}$/.test(identifier);
+      if (!isEmail && !isPhone) {
+        return showAlert('Please enter a valid email address or phone number.', 'error');
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ identifier, password })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.message || 'Login failed.');
+        }
+
+        if (data.token) {
+          localStorage.setItem('trustInvestToken', data.token);
+          localStorage.setItem('trustInvestUser', JSON.stringify(data.user || {}));
+        }
+        if (rememberMe.checked) {
+          localStorage.setItem('trustInvestRemember', identifier);
+        } else {
+          localStorage.removeItem('trustInvestRemember');
+        }
+
+        showAlert('Login successful! Redirecting...', 'success');
+        submitBtn.innerHTML = '<i class="fas fa-circle-check"></i> Success!';
+
+        setTimeout(() => { window.location.href = 'dashboard.html'; }, 1000);
+
+      } catch (err) {
+        showAlert(err.message || 'Something went wrong. Please try again.', 'error');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-arrow-right-to-bracket"></i> Login';
+      }
+    });
+
+    // Forgot password modal controls
+    forgotBtn.addEventListener('click', () => {
+      forgotModal.classList.add('open');
+      resetEmail.focus();
+    });
+    closeModal.addEventListener('click', () => forgotModal.classList.remove('open'));
+    forgotModal.addEventListener('click', (e) => {
+      if (e.target === forgotModal) forgotModal.classList.remove('open');
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') forgotModal.classList.remove('open');
+    });
+
+    // Open WhatsApp with prefilled reset message
+    openWhatsAppBtn.addEventListener('click', () => {
+      const email = resetEmail.value.trim();
+      const phone = resetPhone.value.trim();
+
+      if (!email || !phone) {
+        // Inline highlight (simple, no alert box in modal)
+        if (!email) resetEmail.style.borderColor = '#e74c3c';
+        if (!phone) resetPhone.style.borderColor = '#e74c3c';
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        resetEmail.style.borderColor = '#e74c3c';
+        return;
+      }
+
+      resetEmail.style.borderColor = '';
+      resetPhone.style.borderColor = '';
+
+      const message =
+        `Hello Admin, I want to reset my password.\n\n` +
+        `Email: ${email}\n` +
+        `Phone: ${phone}\n\n` +
+        `Please help me reset my Trust Invest password. Thank you.`;
+
+      const url = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
+      window.open(url, '_blank', 'noopener');
+    });
+
+    // Clear red borders on input
+    [resetEmail, resetPhone].forEach(inp => {
+      inp.addEventListener('input', () => { inp.style.borderColor = ''; });
+    });
+  </script>
+</body>
+</html>

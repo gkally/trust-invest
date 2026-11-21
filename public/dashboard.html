@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Trust Invest</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --ink: #0a2540;
+      --ink-soft: #1e3b4b;
+      --muted: #4f6a7c;
+      --muted-2: #8aa3b1;
+      --green: #1e7b4c;
+      --green-dark: #14633a;
+      --green-soft: #e9f3ee;
+      --line: #deede7;
+      --bg: #f6f9fc;
+      --card: #ffffff;
+      --red: #e74c3c;
+      --gold: #f1c40f;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+      min-height: 100vh;
+      padding-bottom: 90px;
+    }
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 0 22px; }
+
+    /* ---------- TOP BAR ---------- */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 0 8px;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .brand i { color: var(--green); font-size: 1.7rem; }
+    .topbar-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .wa-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #25d366;
+      color: white;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 10px 18px;
+      border-radius: 60px;
+      text-decoration: none;
+      box-shadow: 0 6px 16px rgba(37, 211, 102, 0.3);
+      transition: 0.2s;
+    }
+    .wa-pill:hover { background: #1da851; transform: translateY(-1px); }
+    .avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--green), #2fa36b);
+      color: white;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      border: 2px solid white;
+      box-shadow: 0 4px 12px rgba(30, 123, 76, 0.25);
+      cursor: pointer;
+      position: relative;
+    }
+    .logout-pop {
+      position: absolute;
+      top: 54px; right: 0;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0,30,20,0.15);
+      padding: 6px;
+      display: none;
+      z-index: 1000;
+      min-width: 150px;
+    }
+    .logout-pop.open { display: block; }
+    .logout-pop button {
+      width: 100%;
+      background: transparent;
+      border: none;
+      text-align: left;
+      padding: 10px 14px;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: var(--ink);
+      cursor: pointer;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logout-pop button:hover { background: #fdecec; color: var(--red); }
+
+    /* ---------- GREETING ---------- */
+    .greeting { margin: 10px 0 22px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .greeting h1 {
+      font-size: 1.9rem;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      color: var(--ink);
+    }
+    .greeting p { color: var(--muted); font-size: 0.95rem; margin-top: 4px; }
+    .refresh-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: white;
+      border: 1px solid var(--line);
+      padding: 9px 16px;
+      border-radius: 40px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: var(--ink);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .refresh-btn:hover { border-color: var(--green); color: var(--green); }
+    .refresh-btn.spinning i { animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ---------- BALANCE + MARKET GRID ---------- */
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 22px;
+      margin-bottom: 22px;
+    }
+    @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } }
+
+    /* Balance card */
+    .balance-card {
+      background: linear-gradient(140deg, #0a2540 0%, #123e55 65%, #14594a 100%);
+      color: white;
+      border-radius: 28px;
+      padding: 28px 30px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 18px 40px rgba(10, 37, 64, 0.25);
+    }
+    .balance-card::before {
+      content: '';
+      position: absolute;
+      width: 320px; height: 320px;
+      background: radial-gradient(circle, rgba(76, 219, 140, 0.18) 0%, transparent 65%);
+      top: -120px; right: -100px;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .balance-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 2;
+    }
+    .balance-head .label {
+      font-size: 0.78rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #9fc0b4;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .eye-toggle {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: #cbdbe6;
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: 0.2s;
+    }
+    .eye-toggle:hover { background: rgba(255,255,255,0.2); color: white; }
+
+    .balance-usd {
+      font-size: 2.7rem;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1;
+      position: relative;
+      z-index: 2;
+      transition: color 0.3s;
+    }
+    .balance-usd.flash { color: #4cdb8c; }
+    .balance-btc {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
+      padding: 7px 14px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.92rem;
+      color: #d7f2e3;
+      position: relative;
+      z-index: 2;
+    }
+    .balance-btc i { color: #f7931a; }
+    .balance-foot {
+      display: flex;
+      gap: 22px;
+      margin-top: 22px;
+      position: relative;
+      z-index: 2;
+      flex-wrap: wrap;
+    }
+    .balance-foot .stat .k {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #9fc0b4;
+      font-weight: 600;
+    }
+    .balance-foot .stat .v {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: white;
+      margin-top: 2px;
+    }
+    .balance-foot .stat .v.green { color: #4cdb8c; }
+    .balance-foot .stat .v.amber { color: #f1c40f; }
+
+    /* Market card */
+    .market-card {
+      background: var(--card);
+      border-radius: 28px;
+      padding: 24px 26px;
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 30px rgba(0, 50, 30, 0.06);
+      display: flex;
+      flex-direction: column;
+    }
+    .market-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .market-head .pair {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--ink);
+    }
+    .market-head .pair i { color: #f7931a; font-size: 1.3rem; }
+    .live-dot {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--green);
+      background: var(--green-soft);
+      padding: 4px 10px;
+      border-radius: 40px;
+    }
+    .live-dot::before {
+      content: '';
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 1.3s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(30, 123, 76, 0.5); }
+      70% { box-shadow: 0 0 0 8px rgba(30, 123, 76, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(30, 123, 76, 0); }
+    }
+    .market-price {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      color: var(--ink);
+      margin: 6px 0 2px;
+      transition: color 0.3s;
+    }
+    .market-price.up { color: var(--green); }
+    .market-price.down { color: var(--red); }
+    .market-change {
+      font-size: 0.9rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .market-change.up { color: var(--green); }
+    .market-change.down { color: var(--red); }
+    .chart-wrap {
+      flex: 1;
+      min-height: 110px;
+      position: relative;
+      margin-top: 4px;
+    }
+    #priceChart { width: 100%; height: 110px; display: block; }
+    .market-foot {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--line);
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .market-foot b { color: var(--ink); font-weight: 700; }
+
+    /* ---------- QUICK ACTIONS ---------- */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+      margin-bottom: 26px;
+    }
+    .qa {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 20px 16px;
+      text-decoration: none;
+      color: var(--ink);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      text-align: center;
+      transition: all 0.2s ease;
+      box-shadow: 0 6px 18px rgba(0, 50, 30, 0.04);
+    }
+    .qa:hover {
+      transform: translateY(-3px);
+      border-color: #b5d5c7;
+      box-shadow: 0 14px 28px rgba(20, 90, 50, 0.1);
+    }
+    .qa .ic {
+      width: 52px; height: 52px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      color: var(--green);
+      background: var(--green-soft);
+      transition: 0.2s;
+    }
+    .qa:hover .ic { background: var(--green); color: white; }
+    .qa span { font-weight: 700; font-size: 0.92rem; }
+    .qa small { color: var(--muted); font-size: 0.76rem; font-weight: 500; }
+    .qa.primary {
+      background: var(--green);
+      border-color: var(--green);
+      color: white;
+    }
+    .qa.primary .ic { background: rgba(255,255,255,0.18); color: white; }
+    .qa.primary:hover .ic { background: white; color: var(--green); }
+    .qa.primary small { color: #d7f2e3; }
+
+    /* ---------- PORTFOLIO / PLANS ---------- */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 22px;
+      margin-bottom: 26px;
+    }
+    @media (max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      padding: 24px 24px;
+      box-shadow: 0 10px 26px rgba(0, 50, 30, 0.05);
+    }
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .panel-head h2 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      color: var(--ink);
+    }
+    .panel-head a {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--green);
+      text-decoration: none;
+    }
+    .panel-head a:hover { text-decoration: underline; }
+
+    .alloc-row { margin-bottom: 16px; }
+    .alloc-row:last-child { margin-bottom: 0; }
+    .alloc-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .alloc-top .name { display: flex; align-items: center; gap: 8px; color: var(--ink-soft); }
+    .alloc-top .name i { color: var(--green); width: 16px; }
+    .alloc-top .pct { color: var(--muted); font-weight: 700; }
+    .alloc-bar {
+      height: 9px;
+      background: #eef5f1;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .alloc-bar > div {
+      height: 100%;
+      border-radius: 20px;
+      transition: width 0.7s ease;
+      background: linear-gradient(90deg, var(--green), #2fa36b);
+    }
+    .alloc-bar.btc > div { background: linear-gradient(90deg, #f7931a, #ffb84d); }
+    .alloc-bar.ai  > div { background: linear-gradient(90deg, #3498db, #5dade2); }
+    .alloc-bar.ads > div { background: linear-gradient(90deg, #9b59b6, #bb8fce); }
+
+    .activity-list { list-style: none; }
+    .activity-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #f0f5f2;
+    }
+    .activity-list li:last-child { border-bottom: none; padding-bottom: 0; }
+    .act-ic {
+      width: 38px; height: 38px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+    .act-ic.dep { background: #e9f8f0; color: var(--green); }
+    .act-ic.wd  { background: #fdecec; color: var(--red); }
+    .act-ic.inv { background: #eaf4fb; color: #2980b9; }
+    .act-ic.mat { background: #fff8e1; color: #b8860b; }
+    .act-ic.cre { background: #e9f8f0; color: var(--green); }
+    .act-ic.deb { background: #fdecec; color: var(--red); }
+    .act-body { flex: 1; min-width: 0; }
+    .act-body .t { font-size: 0.9rem; font-weight: 700; color: var(--ink); }
+    .act-body .d { font-size: 0.75rem; color: var(--muted); }
+    .act-amt { font-size: 0.9rem; font-weight: 800; }
+    .act-amt.pos { color: var(--green); }
+    .act-amt.neg { color: var(--red); }
+
+    /* ---------- BOTTOM NAV ---------- */
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 16px;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 60px;
+      padding: 8px;
+      display: flex;
+      gap: 4px;
+      box-shadow: 0 16px 40px rgba(0, 40, 20, 0.12);
+      z-index: 900;
+    }
+    .bottom-nav a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      padding: 9px 16px;
+      border-radius: 40px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.68rem;
+      font-weight: 700;
+      transition: 0.2s;
+    }
+    .bottom-nav a i { font-size: 1.05rem; }
+    .bottom-nav a.active { background: var(--green); color: white; }
+    .bottom-nav a:hover:not(.active) { background: var(--green-soft); color: var(--green); }
+
+    .toast {
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--ink);
+      color: white;
+      padding: 12px 22px;
+      border-radius: 40px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.35s;
+      z-index: 1200;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.success { background: var(--green); }
+    .toast.error { background: var(--red); }
+
+    @media (max-width: 520px) {
+      .bottom-nav a { padding: 9px 11px; font-size: 0.6rem; }
+      .bottom-nav a i { font-size: 0.95rem; }
+      .greeting h1 { font-size: 1.5rem; }
+      .balance-usd { font-size: 2.2rem; }
+      .market-price { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <a href="index.html" class="brand">
+        <i class="fas fa-shield-halved"></i>
+        <span>Trust Invest</span>
+      </a>
+      <div class="topbar-right">
+        <a href="https://wa.me/447448774304?text=Hello%20Admin%2C%20I%20need%20help%20with%20my%20Trust%20Invest%20account." target="_blank" rel="noopener" class="wa-pill">
+          <i class="fab fa-whatsapp"></i> Admin Support
+        </a>
+        <div style="position:relative;">
+          <div class="avatar" id="userAvatar" title="Your profile">TI</div>
+          <div class="logout-pop" id="logoutPop">
+            <button id="logoutBtn"><i class="fas fa-right-from-bracket"></i> Log out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GREETING -->
+    <div class="greeting">
+      <div>
+        <h1 id="greetingName">Welcome back 👋</h1>
+        <p>Here's your live balance, investments and Bitcoin market.</p>
+      </div>
+      <button class="refresh-btn" id="refreshBtn"><i class="fas fa-rotate"></i> Refresh</button>
+    </div>
+
+    <!-- BALANCE + MARKET -->
+    <div class="hero-grid">
+      <!-- BALANCE -->
+      <div class="balance-card">
+        <div class="balance-head">
+          <span class="label"><i class="fas fa-wallet"></i> Available balance</span>
+          <button class="eye-toggle" id="eyeToggle" aria-label="Toggle balance visibility">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+        <div class="balance-usd" id="balanceUsd">$0.00</div>
+        <div class="balance-btc">
+          <i class="fab fa-bitcoin"></i>
+          <span id="balanceBtc">0.00000000 BTC</span>
+        </div>
+        <div class="balance-foot">
+          <div class="stat">
+            <div class="k">Active investments</div>
+            <div class="v" id="activeInv">0</div>
+          </div>
+          <div class="stat">
+            <div class="k">Total profit</div>
+            <div class="v green" id="totalProfit">$0.00</div>
+          </div>
+          <div class="stat">
+            <div class="k">Pending</div>
+            <div class="v amber" id="pending">$0.00</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MARKET -->
+      <div class="market-card">
+        <div class="market-head">
+          <div class="pair"><i class="fab fa-bitcoin"></i> BTC / USD</div>
+          <span class="live-dot">Live</span>
+        </div>
+        <div class="market-price" id="btcPrice">$0.00</div>
+        <div class="market-change" id="btcChange">
+          <i class="fas fa-arrow-up"></i> <span>0.00%</span>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="priceChart"></canvas>
+        </div>
+        <div class="market-foot">
+          <span>24h High <b id="btcHigh">$0</b></span>
+          <span>24h Low <b id="btcLow">$0</b></span>
+          <span>Updated <b id="lastUpdate">now</b></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="quick-actions">
+      <a href="deposit.html" class="qa primary">
+        <div class="ic"><i class="fas fa-arrow-down-to-line"></i></div>
+        <span>Top Up</span>
+        <small>Add funds</small>
+      </a>
+      <a href="withdraw.html" class="qa">
+        <div class="ic"><i class="fas fa-arrow-up-from-bracket"></i></div>
+        <span>Withdraw</span>
+        <small>Cash out</small>
+      </a>
+      <a href="invest.html" class="qa">
+        <div class="ic"><i class="fas fa-chart-line"></i></div>
+        <span>Invest</span>
+        <small>Earn 70%</small>
+      </a>
+      <a href="history.html" class="qa">
+        <div class="ic"><i class="fas fa-clock-rotate-left"></i></div>
+        <span>History</span>
+        <small>Transactions</small>
+      </a>
+      <a href="about.html" class="qa">
+        <div class="ic"><i class="fas fa-circle-info"></i></div>
+        <span>About</span>
+        <small>Learn more</small>
+      </a>
+    </div>
+
+    <!-- PORTFOLIO + RECENT ACTIVITY -->
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Portfolio allocation</h2>
+          <a href="invest.html">Manage →</a>
+        </div>
+        <div class="alloc-row">
+          <div class="alloc-top">
+            <span class="name"><i class="fab fa-bitcoin"></i> Bitcoin</span>
+            <span class="pct" id="allocBtcPct">0%</span>
+          </div>
+          <div class="alloc-bar btc"><div id="allocBtcBar" style="width:0%"></div></div>
+        </div>
+        <div class="alloc-row">
+          <div class="alloc-top">
+            <span class="name"><i class="fas fa-robot"></i> AI Auto‑Trade</span>
+            <span class="pct" id="allocAiPct">0%</span>
+          </div>
+          <div class="alloc-bar ai"><div id="allocAiBar" style="width:0%"></div></div>
+        </div>
+        <div class="alloc-row">
+          <div class="alloc-top">
+            <span class="name"><i class="fas fa-ad"></i> Digital Ads</span>
+            <span class="pct" id="allocAdsPct">0%</span>
+          </div>
+          <div class="alloc-bar ads"><div id="allocAdsBar" style="width:0%"></div></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Recent activity</h2>
+          <a href="history.html">View all →</a>
+        </div>
+        <ul class="activity-list" id="activityList">
+          <li>
+            <div class="act-ic dep"><i class="fas fa-arrow-down"></i></div>
+            <div class="act-body">
+              <div class="t">Loading…</div>
+              <div class="d">Fetching your activity</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="text-align:center; color:var(--muted); font-size:0.8rem; padding:10px 0 20px;">
+      <i class="fas fa-lock" style="color:var(--green);"></i> Secured with 256‑bit encryption · Trust Invest © 2024
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <a href="dashboard.html" class="active"><i class="fas fa-house"></i> Home</a>
+    <a href="invest.html"><i class="fas fa-chart-line"></i> Invest</a>
+    <a href="deposit.html"><i class="fas fa-arrow-down-to-line"></i> Top Up</a>
+    <a href="withdraw.html"><i class="fas fa-arrow-up-from-bracket"></i> Withdraw</a>
+    <a href="history.html"><i class="fas fa-clock-rotate-left"></i> History</a>
+  </nav>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    /* =========================================================
+       AUTH
+       ========================================================= */
+    const token = localStorage.getItem('trustInvestToken');
+    let currentUser = {};
+    try { currentUser = JSON.parse(localStorage.getItem('trustInvestUser') || '{}'); } catch(e) {}
+    if (!token) window.location.href = 'login.html';
+
+    const displayName = (currentUser.fullName || 'Investor').split(' ')[0];
+    document.getElementById('greetingName').textContent = `Welcome back, ${displayName} 👋`;
+    document.getElementById('userAvatar').textContent =
+      (currentUser.fullName || 'TI').split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase();
+
+    /* =========================================================
+       STATE
+       ========================================================= */
+    let balanceUsdValue = 0;
+    let btcPriceUsd = 0;
+    let balanceHidden = false;
+    let lastBalanceSnapshot = null;
+    let investments = [];
+    let activity = [];
+
+    const balanceUsdEl = document.getElementById('balanceUsd');
+    const balanceBtcEl = document.getElementById('balanceBtc');
+    const eyeToggle = document.getElementById('eyeToggle');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const toast = document.getElementById('toast');
+
+    /* =========================================================
+       HELPERS
+       ========================================================= */
+    function fmtUsd(n) {
+      return '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    function fmtBtc(n) { return Number(n || 0).toFixed(8) + ' BTC'; }
+    function showToast(msg, type) {
+      toast.textContent = msg;
+      toast.className = 'toast show ' + (type || '');
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => { toast.className = 'toast ' + (type || ''); }, 3000);
+    }
+
+    /* =========================================================
+       API
+       ========================================================= */
+    async function api(path, opts = {}) {
+      const res = await fetch(path, {
+        ...opts,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
+          'x-user-id': (currentUser && currentUser.id) || '',
+          ...(opts.headers || {})
+        }
+      });
+      let data = {};
+      try { data = await res.json(); } catch (e) {}
+      if (!res.ok) throw new Error(data.message || 'Request failed');
+      return data;
+    }
+
+    /* =========================================================
+       BALANCE / PORTFOLIO
+       ========================================================= */
+    function renderBalance() {
+      if (balanceHidden) {
+        balanceUsdEl.textContent = '••••••';
+        balanceBtcEl.textContent = '•••••••• BTC';
+        return;
+      }
+      balanceUsdEl.textContent = fmtUsd(balanceUsdValue);
+      const btc = btcPriceUsd > 0 ? balanceUsdValue / btcPriceUsd : 0;
+      balanceBtcEl.textContent = fmtBtc(btc);
+    }
+
+    function flashBalance() {
+      balanceUsdEl.classList.add('flash');
+      setTimeout(() => balanceUsdEl.classList.remove('flash'), 800);
+    }
+
+    function renderPortfolio() {
+      const active = investments.filter(i => i.status === 'active');
+      const totals = { bitcoin: 0, ai: 0, ads: 0 };
+      active.forEach(i => {
+        const p = i.plan || 'bitcoin';
+        if (totals[p] != null) totals[p] += Number(i.amount) || 0;
+      });
+      const sum = totals.bitcoin + totals.ai + totals.ads || 1;
+      const pct = {
+        btc: Math.round(totals.bitcoin / sum * 100),
+        ai:  Math.round(totals.ai / sum * 100),
+        ads: Math.round(totals.ads / sum * 100)
+      };
+
+      document.getElementById('allocBtcPct').textContent = pct.btc + '%';
+      document.getElementById('allocAiPct').textContent  = pct.ai  + '%';
+      document.getElementById('allocAdsPct').textContent = pct.ads + '%';
+      document.getElementById('allocBtcBar').style.width = pct.btc + '%';
+      document.getElementById('allocAiBar').style.width  = pct.ai  + '%';
+      document.getElementById('allocAdsBar').style.width = pct.ads + '%';
+
+      // Total profit = sum of profits on active + completed
+      const totalProfit = investments.reduce((s, i) => s + (Number(i.profit) || 0), 0);
+      document.getElementById('activeInv').textContent   = active.length;
+      document.getElementById('totalProfit').textContent = fmtUsd(totalProfit);
+
+      // Pending = sum of pending withdrawals from activity (approx) — server doesn't expose directly in overview
+      const pending = activity
+        .filter(a => a.type === 'withdraw')
+        .reduce((s, a) => s + (Number(a.amount) || 0), 0);
+      // We show it only as a hint; withdrawals already deducted from balance so just show count*? 
+      // To avoid double counting, show "0" if none, otherwise total pending amount
+      document.getElementById('pending').textContent = pending > 0 ? fmtUsd(pending) : '$0.00';
+    }
+
+    /* =========================================================
+       ACTIVITY
+       ========================================================= */
+    function renderActivity() {
+      const list = document.getElementById('activityList');
+      if (!activity.length) {
+        list.innerHTML = `
+          <li>
+            <div class="act-ic dep"><i class="fas fa-arrow-down"></i></div>
+            <div class="act-body">
+              <div class="t">No transactions yet</div>
+              <div class="d">Your activity will appear here</div>
+            </div>
+          </li>`;
+        return;
+      }
+      list.innerHTML = activity.slice(0, 6).map(it => {
+        const type = it.type || '';
+        const amount = Number(it.amount) || 0;
+        let cls = 'dep', icon = 'fa-arrow-down', positive = true;
+        if (type === 'withdraw' || type === 'withdraw-refund') { cls = type === 'withdraw' ? 'wd' : 'cre'; icon = type === 'withdraw' ? 'fa-arrow-up' : 'fa-rotate-left'; positive = type !== 'withdraw'; }
+        else if (type === 'invest') { cls = 'inv'; icon = 'fa-chart-line'; positive = false; }
+        else if (type === 'credit') { cls = 'cre'; icon = 'fa-plus'; positive = true; }
+        else if (type === 'debit') { cls = 'deb'; icon = 'fa-minus'; positive = false; }
+        else if (type === 'maturity') { cls = 'mat'; icon = 'fa-trophy'; positive = true; }
+        else if (type === 'deposit') { cls = 'dep'; icon = 'fa-arrow-down'; positive = true; }
+
+        const title = it.note || (type ? type.charAt(0).toUpperCase() + type.slice(1) : 'Transaction');
+        const when = it.at ? new Date(it.at).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+        return `
+          <li>
+            <div class="act-ic ${cls}"><i class="fas ${icon}"></i></div>
+            <div class="act-body">
+              <div class="t">${title}</div>
+              <div class="d">${when}</div>
+            </div>
+            <div class="act-amt ${positive ? 'pos' : 'neg'}">${positive ? '+' : '−'}${fmtUsd(Math.abs(amount))}</div>
+          </li>`;
+      }).join('');
+    }
+
+    /* =========================================================
+       LOAD FROM SERVER
+       ========================================================= */
+    async function loadDashboard(manual = false) {
+      if (manual) {
+        refreshBtn.classList.add('spinning');
+      }
+      try {
+        const data = await api('/api/user/overview');
+
+        const newBalance = Number(data.balance) || 0;
+        const changed = lastBalanceSnapshot !== null && newBalance !== lastBalanceSnapshot;
+        balanceUsdValue = newBalance;
+        lastBalanceSnapshot = newBalance;
+
+        investments = Array.isArray(data.investments) ? data.investments : [];
+        activity = Array.isArray(data.activity) ? data.activity : [];
+
+        renderBalance();
+        renderPortfolio();
+        renderActivity();
+
+        if (changed) {
+          flashBalance();
+          if (manual) showToast('Balance updated', 'success');
+        } else if (manual) {
+          showToast('Dashboard refreshed', 'success');
+        }
+      } catch (err) {
+        console.error('dashboard load failed:', err);
+        if (manual) showToast(err.message || 'Could not refresh', 'error');
+      } finally {
+        refreshBtn.classList.remove('spinning');
+      }
+    }
+
+    /* =========================================================
+       EYE TOGGLE / REFRESH / LOGOUT
+       ========================================================= */
+    eyeToggle.addEventListener('click', () => {
+      balanceHidden = !balanceHidden;
+      eyeToggle.innerHTML = balanceHidden
+        ? '<i class="fas fa-eye-slash"></i>'
+        : '<i class="fas fa-eye"></i>';
+      renderBalance();
+    });
+
+    refreshBtn.addEventListener('click', () => loadDashboard(true));
+
+    // Refresh when the tab regains focus (e.g. after admin credits you elsewhere)
+    window.addEventListener('focus', () => loadDashboard(false));
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) loadDashboard(false);
+    });
+
+    // Auto-refresh every 10 s
+    setInterval(() => loadDashboard(false), 10000);
+
+    /* =========================================================
+       AVATAR / LOGOUT
+       ========================================================= */
+    const avatarEl = document.getElementById('userAvatar');
+    const logoutPop = document.getElementById('logoutPop');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    avatarEl.addEventListener('click', (e) => {
+      e.stopPropagation();
+      logoutPop.classList.toggle('open');
+    });
+    document.addEventListener('click', () => logoutPop.classList.remove('open'));
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('trustInvestToken');
+      localStorage.removeItem('trustInvestUser');
+      window.location.href = 'login.html';
+    });
+
+    /* =========================================================
+       BTC MARKET (live simulation, feeds BTC balance display)
+       ========================================================= */
+    const canvas = document.getElementById('priceChart');
+    const ctx = canvas.getContext('2d');
+    const priceEl = document.getElementById('btcPrice');
+    const changeEl = document.getElementById('btcChange');
+    const highEl = document.getElementById('btcHigh');
+    const lowEl = document.getElementById('btcLow');
+    const lastUpdateEl = document.getElementById('lastUpdate');
+
+    let history = [];
+    let dayHigh = 0, dayLow = Infinity;
+    let prevPrice = 0;
+    let openPrice = 0;
+
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = 110 * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function seedHistory(price) {
+      history = [];
+      let p = price;
+      for (let i = 0; i < 40; i++) {
+        p += (Math.random() - 0.5) * price * 0.004;
+        history.push(p);
+      }
+      history.push(price);
+      openPrice = history[0];
+    }
+
+    function updateMarket() {
+      const drift = (Math.random() - 0.48) * 0.0025;
+      const newPrice = prevPrice > 0
+        ? Math.max(prevPrice * (1 + drift), 1000)
+        : 63000;
+
+      prevPrice = newPrice;
+      btcPriceUsd = newPrice;
+
+      history.push(newPrice);
+      if (history.length > 60) history.shift();
+      dayHigh = Math.max(dayHigh, newPrice);
+      dayLow  = Math.min(dayLow,  newPrice);
+
+      priceEl.textContent = '$' + newPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const changePct = ((newPrice - openPrice) / openPrice) * 100;
+      const up = changePct >= 0;
+      changeEl.className = 'market-change ' + (up ? 'up' : 'down');
+      changeEl.innerHTML = `<i class="fas fa-arrow-${up ? 'up' : 'down'}"></i> <span>${up ? '+' : ''}${changePct.toFixed(2)}%</span>`;
+      priceEl.className = 'market-price ' + (up ? 'up' : 'down');
+      highEl.textContent = '$' + dayHigh.toLocaleString('en-US', { maximumFractionDigits: 0 });
+      lowEl.textContent  = '$' + dayLow.toLocaleString('en-US',  { maximumFractionDigits: 0 });
+      lastUpdateEl.textContent = new Date().toLocaleTimeString();
+
+      priceEl.animate([{ opacity: 0.55 }, { opacity: 1 }], { duration: 500, easing: 'ease-out' });
+      drawChart(up);
+      renderBalance(); // keep BTC display in sync
+    }
+
+    function drawChart(up) {
+      const w = canvas.width / (window.devicePixelRatio || 1);
+      const h = 110;
+      ctx.clearRect(0, 0, w, h);
+      if (history.length < 2) return;
+      const min = Math.min(...history);
+      const max = Math.max(...history);
+      const range = max - min || 1;
+      const pad = 6;
+      const stepX = (w - pad * 2) / (history.length - 1);
+      const pts = history.map((p, i) => ({
+        x: pad + i * stepX,
+        y: pad + (h - pad * 2) * (1 - (p - min) / range)
+      }));
+      const color = up ? '#1e7b4c' : '#e74c3c';
+      const grad = ctx.createLinearGradient(0, 0, 0, h);
+      grad.addColorStop(0, up ? 'rgba(30,123,76,0.22)' : 'rgba(231,76,60,0.22)');
+      grad.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.beginPath();
+      ctx.moveTo(pts[0].x, h);
+      pts.forEach(p => ctx.lineTo(p.x, p.y));
+      ctx.lineTo(pts[pts.length - 1].x, h);
+      ctx.closePath();
+      ctx.fillStyle = grad;
+      ctx.fill();
+      ctx.beginPath();
+      pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      ctx.stroke();
+      const last = pts[pts.length - 1];
+      ctx.beginPath();
+      ctx.arc(last.x, last.y, 4, 0, Math.PI * 2);
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(last.x, last.y, 7, 0, Math.PI * 2);
+      ctx.fillStyle = up ? 'rgba(30,123,76,0.15)' : 'rgba(231,76,60,0.15)';
+      ctx.fill();
+    }
+
+    function initMarket() {
+      const start = 63000 + (Math.random() - 0.5) * 4000;
+      prevPrice = start;
+      dayHigh = start;
+      dayLow = start;
+      seedHistory(start);
+      btcPriceUsd = start;
+      updateMarket();
+      setInterval(updateMarket, 2000);
+    }
+
+    /* =========================================================
+       BOOT
+       ========================================================= */
+    initMarket();
+    loadDashboard(true);
+  </script>
+</body>
+</html>

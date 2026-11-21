@@ -1,0 +1,21 @@
+# ===== dependencies =====
+node_modules/
+npm-debug.log*
+
+# ===== runtime / generated =====
+db_cache.json
+*.log
+server.log
+
+# ===== OS / editor junk =====
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*~
+
+# ===== keep these tracked explicitly =====
+!robots.txt
+!public/robots.txt
+!.env.example

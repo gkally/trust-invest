@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deposit BTC — Trust Invest</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --ink: #0a2540;
+      --ink-soft: #1e3b4b;
+      --muted: #4f6a7c;
+      --muted-2: #8aa3b1;
+      --green: #1e7b4c;
+      --green-dark: #14633a;
+      --green-soft: #e9f3ee;
+      --line: #deede7;
+      --bg: #f6f9fc;
+      --card: #ffffff;
+      --red: #e74c3c;
+      --gold: #f1c40f;
+      --btc: #f7931a;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(145deg, #f6f9fc 0%, #eef5f1 100%);
+      color: var(--ink);
+      line-height: 1.5;
+      min-height: 100vh;
+      padding: 24px 20px 40px;
+    }
+    .wrap { max-width: 640px; margin: 0 auto; }
+
+    /* TOP BAR */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.92rem;
+      padding: 10px 16px;
+      border-radius: 40px;
+      background: white;
+      border: 1px solid var(--line);
+      transition: 0.2s;
+    }
+    .back-link:hover { border-color: var(--green); color: var(--green); }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .brand i { color: var(--green); font-size: 1.5rem; }
+
+    /* CARD */
+    .card {
+      background: white;
+      border-radius: 30px;
+      padding: 34px 32px;
+      box-shadow: 0 20px 45px rgba(0, 50, 30, 0.07);
+      border: 1px solid var(--line);
+      margin-bottom: 22px;
+    }
+    .card h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.6px;
+      color: var(--ink);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card h1 i { color: var(--btc); }
+    .card .sub {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 26px;
+    }
+
+    /* FIELD */
+    .field { margin-bottom: 18px; }
+    .field label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+      margin-bottom: 8px;
+    }
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-wrap > .icon {
+      position: absolute;
+      left: 16px;
+      color: var(--muted-2);
+      font-size: 1rem;
+      pointer-events: none;
+    }
+    .input-wrap input {
+      width: 100%;
+      padding: 15px 48px 15px 44px;
+      font-size: 1.1rem;
+      font-family: inherit;
+      font-weight: 600;
+      color: var(--ink);
+      background: #f8fbfa;
+      border: 1.5px solid #d5e6de;
+      border-radius: 16px;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    .input-wrap input:focus {
+      border-color: var(--green);
+      background: white;
+      box-shadow: 0 0 0 4px rgba(30, 123, 76, 0.1);
+    }
+    .input-wrap .suffix {
+      position: absolute;
+      right: 16px;
+      font-weight: 700;
+      color: var(--muted);
+      font-size: 0.9rem;
+      background: var(--green-soft);
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+    .quick-amounts {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .quick-amounts button {
+      background: var(--green-soft);
+      color: var(--green);
+      border: 1px solid #cde3d9;
+      padding: 7px 16px;
+      border-radius: 40px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .quick-amounts button:hover {
+      background: var(--green);
+      color: white;
+      border-color: var(--green);
+    }
+
+    /* BTC CONVERSION */
+    .conversion-box {
+      background: linear-gradient(135deg, #fff8ee 0%, #fef4e2 100%);
+      border: 1.5px solid #f5e0b8;
+      border-radius: 20px;
+      padding: 18px 20px;
+      margin: 6px 0 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .conversion-box .left { display: flex; align-items: center; gap: 12px; }
+    .conversion-box .btc-icon {
+      width: 46px; height: 46px;
+      background: var(--btc);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+    .conversion-box .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #a0722a; font-weight: 700; }
+    .conversion-box .btc-amount {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #7a5218;
+      letter-spacing: -0.5px;
+    }
+    .conversion-box .rate {
+      font-size: 0.75rem;
+      color: #a0722a;
+      font-weight: 600;
+    }
+    .rate-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid #f0d9a8;
+      padding: 6px 12px;
+      border-radius: 40px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #7a5218;
+    }
+    .rate-pill .dot {
+      width: 6px; height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 1.3s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(30, 123, 76, 0.5); }
+      70% { box-shadow: 0 0 0 8px rgba(30, 123, 76, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(30, 123, 76, 0); }
+    }
+
+    /* BUTTONS */
+    .btn {
+      width: 100%;
+      padding: 17px;
+      font-family: inherit;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: white;
+      background: var(--green);
+      border: 1.5px solid var(--green);
+      border-radius: 60px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 8px 20px rgba(30, 123, 76, 0.25);
+      transition: all 0.2s ease;
+    }
+    .btn:hover:not(:disabled) {
+      background: var(--green-dark);
+      border-color: var(--green-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 12px 26px rgba(30, 123, 76, 0.35);
+    }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+    .btn-secondary {
+      background: white;
+      color: var(--ink);
+      border: 1.5px solid #cbdbe6;
+      box-shadow: none;
+    }
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--green-soft);
+      border-color: var(--green);
+      color: var(--green);
+    }
+    .btn-btc {
+      background: var(--btc);
+      border-color: var(--btc);
+      box-shadow: 0 8px 20px rgba(247, 147, 26, 0.3);
+    }
+    .btn-btc:hover:not(:disabled) {
+      background: #e0820f;
+      border-color: #e0820f;
+      box-shadow: 0 12px 26px rgba(247, 147, 26, 0.4);
+    }
+    .btn-wa {
+      background: #25d366;
+      border-color: #25d366;
+      box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+    }
+    .btn-wa:hover:not(:disabled) {
+      background: #1da851;
+      border-color: #1da851;
+    }
+
+    /* STAGES */
+    .stage { display: none; }
+    .stage.active { display: block; animation: fadeIn 0.35s ease; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* LOADING STAGE */
+    .loading-stage {
+      text-align: center;
+      padding: 30px 0 20px;
+    }
+    .loader-ring {
+      width: 84px; height: 84px;
+      margin: 0 auto 26px;
+      position: relative;
+    }
+    .loader-ring::before,
+    .loader-ring::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 4px solid transparent;
+    }
+    .loader-ring::before {
+      border-top-color: var(--btc);
+      border-right-color: var(--btc);
+      animation: spin 1s linear infinite;
+    }
+    .loader-ring::after {
+      inset: 12px;
+      border-bottom-color: var(--green);
+      border-left-color: var(--green);
+      animation: spin 1.4s linear infinite reverse;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .loader-ring .center-icon {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      color: var(--btc);
+      animation: pulse-icon 1.4s ease-in-out infinite;
+    }
+    @keyframes pulse-icon {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.12); opacity: 0.85; }
+    }
+    .loading-stage h2 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .loading-stage p {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-bottom: 22px;
+    }
+    .progress-bar {
+      height: 6px;
+      background: #eef5f1;
+      border-radius: 20px;
+      overflow: hidden;
+      max-width: 320px;
+      margin: 0 auto;
+    }
+    .progress-bar > div {
+      height: 100%;
+      background: linear-gradient(90deg, var(--btc), var(--green));
+      border-radius: 20px;
+      width: 0%;
+      transition: width 0.3s linear;
+    }
+    .loading-step {
+      font-size: 0.8rem;
+      color: var(--muted-2);
+      font-weight: 600;
+      margin-top: 14px;
+      min-height: 20px;
+    }
+
+    /* ADDRESS STAGE */
+    .address-stage h2 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 6px;
+      text-align: center;
+    }
+    .address-stage .amount-badge {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+    .amount-badge .btc-big {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--btc);
+      letter-spacing: -0.5px;
+    }
+    .amount-badge .usd-small {
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .qr-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 22px;
+    }
+    .qr-box {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: 0 10px 26px rgba(0, 50, 30, 0.06);
+    }
+    #qrcode { width: 200px; height: 200px; display: block; }
+    #qrcode img, #qrcode canvas { width: 100% !important; height: 100% !important; }
+
+    .address-box {
+      background: #f8fbfa;
+      border: 1.5px dashed #cde3d9;
+      border-radius: 18px;
+      padding: 16px 18px;
+      margin-bottom: 22px;
+    }
+    .address-box .lbl {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--muted-2);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .address-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .address-text {
+      flex: 1;
+      font-family: 'Courier New', monospace;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--ink);
+      word-break: break-all;
+      line-height: 1.4;
+    }
+    .copy-btn {
+      background: white;
+      border: 1.5px solid #cde3d9;
+      color: var(--green);
+      width: 42px; height: 42px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 1rem;
+      flex-shrink: 0;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .copy-btn:hover { background: var(--green); color: white; border-color: var(--green); }
+    .copy-btn.copied { background: var(--green); color: white; border-color: var(--green); }
+
+    .instructions {
+      background: #f0f9f4;
+      border: 1px solid #cde3d9;
+      border-radius: 18px;
+      padding: 18px 20px;
+      margin-bottom: 22px;
+    }
+    .instructions h3 {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: var(--green);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .instructions ol {
+      padding-left: 20px;
+      color: var(--ink-soft);
+      font-size: 0.88rem;
+      line-height: 1.7;
+    }
+    .instructions ol li { margin-bottom: 4px; }
+
+    .warning-note {
+      background: #fff8ee;
+      border: 1px solid #f5e0b8;
+      border-radius: 14px;
+      padding: 12px 16px;
+      font-size: 0.82rem;
+      color: #a0722a;
+      font-weight: 600;
+      margin-bottom: 22px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .warning-note i { margin-top: 2px; flex-shrink: 0; }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 37, 64, 0.6);
+      backdrop-filter: blur(5px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: white;
+      border-radius: 28px;
+      width: 100%;
+      max-width: 460px;
+      padding: 32px 30px;
+      box-shadow: 0 30px 70px rgba(0, 30, 20, 0.35);
+      border: 1px solid var(--line);
+      animation: modalIn 0.25s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(16px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 6px;
+    }
+    .modal h2 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .modal h2 i { color: var(--green); }
+    .modal-close {
+      background: #f0f5f2;
+      border: none;
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s;
+      flex-shrink: 0;
+    }
+    .modal-close:hover { background: var(--green-soft); color: var(--green); }
+    .modal p.modal-sub {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 22px;
+      line-height: 1.45;
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--ink);
+      color: white;
+      padding: 13px 24px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.35s;
+      z-index: 3000;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      max-width: 90vw;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.success { background: var(--green); }
+    .toast.error { background: var(--red); }
+
+    @media (max-width: 520px) {
+      .card { padding: 26px 20px; border-radius: 24px; }
+      .card h1 { font-size: 1.35rem; }
+      #qrcode { width: 170px; height: 170px; }
+      .conversion-box { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <a href="dashboard.html" class="back-link"><i class="fas fa-arrow-left"></i> Back</a>
+      <a href="index.html" class="brand"><i class="fas fa-shield-halved"></i> Trust Invest</a>
+    </div>
+
+    <!-- MAIN CARD -->
+    <div class="card">
+      <h1><i class="fab fa-bitcoin"></i> Deposit Bitcoin</h1>
+      <p class="sub">Fund your Trust Invest account with BTC — fast and secure.</p>
+
+      <!-- STAGE 1: AMOUNT INPUT -->
+      <div class="stage active" id="stageInput">
+        <div class="field">
+          <label for="usdAmount">Amount in USD</label>
+          <div class="input-wrap">
+            <i class="fas fa-dollar-sign icon"></i>
+            <input type="number" id="usdAmount" placeholder="0.00" min="10" step="0.01" inputmode="decimal">
+            <span class="suffix">USD</span>
+          </div>
+          <div class="quick-amounts">
+            <button type="button" data-amt="50">$50</button>
+            <button type="button" data-amt="100">$100</button>
+            <button type="button" data-amt="250">$250</button>
+            <button type="button" data-amt="500">$500</button>
+            <button type="button" data-amt="1000">$1,000</button>
+          </div>
+        </div>
+
+        <div class="conversion-box">
+          <div class="left">
+            <div class="btc-icon"><i class="fab fa-bitcoin"></i></div>
+            <div>
+              <div class="label">You will send</div>
+              <div class="btc-amount" id="btcAmount">0.00000000 BTC</div>
+              <div class="rate" id="rateDisplay">Fetching live rate…</div>
+            </div>
+          </div>
+          <div class="rate-pill" id="ratePill">
+            <span class="dot"></span> <span id="ratePillText">live</span>
+          </div>
+        </div>
+
+        <button class="btn btn-btc" id="generateBtn">
+          <i class="fas fa-qrcode"></i> Generate deposit address
+        </button>
+        <p style="text-align:center; font-size:0.78rem; color:var(--muted-2); margin-top:14px;">
+          <i class="fas fa-lock"></i> Minimum deposit: $10 · No fees on deposits
+        </p>
+      </div>
+
+      <!-- STAGE 2: LOADING -->
+      <div class="stage" id="stageLoading">
+        <div class="loading-stage">
+          <div class="loader-ring">
+            <div class="center-icon"><i class="fab fa-bitcoin"></i></div>
+          </div>
+          <h2>Generating your deposit address…</h2>
+          <p>Securing a unique BTC address for your deposit.</p>
+          <div class="progress-bar"><div id="progressFill"></div></div>
+          <div class="loading-step" id="loadingStep">Connecting to secure node…</div>
+        </div>
+      </div>
+
+      <!-- STAGE 3: ADDRESS -->
+      <div class="stage address-stage" id="stageAddress">
+        <h2>Send Bitcoin to this address</h2>
+        <div class="amount-badge">
+          <div class="btc-big" id="addressBtcAmount">0.00000000 BTC</div>
+          <div class="usd-small" id="addressUsdAmount">$0.00</div>
+        </div>
+
+        <div class="qr-wrap">
+          <div class="qr-box">
+            <div id="qrcode"></div>
+          </div>
+        </div>
+
+        <div class="address-box">
+          <div class="lbl"><i class="fas fa-wallet"></i> Bitcoin address (BTC · Bitcoin Network)</div>
+          <div class="address-row">
+            <div class="address-text" id="depositAddress">bc1qtkzm9j7v0tj87xes80pm0avstgme6c0sxquszm</div>
+            <button class="copy-btn" id="copyBtn" aria-label="Copy address">
+              <i class="fas fa-copy"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="instructions">
+          <h3><i class="fas fa-circle-info"></i> How to complete your deposit</h3>
+          <ol>
+            <li>Open your Bitcoin wallet (Trust Wallet, Binance, Coinbase, etc.).</li>
+            <li>Send <b>exactly</b> the BTC amount shown above to the address.</li>
+            <li>Wait for 1 network confirmation (usually 10–30 minutes).</li>
+            <li>Click <b>"I have paid"</b> below and enter your transaction hash.</li>
+            <li>Send the confirmation to our admin on WhatsApp to credit your account.</li>
+          </ol>
+        </div>
+
+        <div class="warning-note">
+          <i class="fas fa-triangle-exclamation"></i>
+          <div>Only send <b>BTC</b> on the <b>Bitcoin network</b> to this address. Sending any other coin or network will result in permanent loss.</div>
+        </div>
+
+        <button class="btn" id="paidBtn" style="margin-bottom:12px;">
+          <i class="fas fa-check-circle"></i> I have paid
+        </button>
+        <button class="btn btn-secondary" id="startOverBtn">
+          <i class="fas fa-rotate-left"></i> Start over
+        </button>
+      </div>
+    </div>
+
+    <!-- HELP FOOTER -->
+    <div style="text-align:center; color:var(--muted); font-size:0.82rem; padding:6px 0;">
+      Need help? <a href="https://wa.me/447448774304?text=Hello%20Admin%2C%20I%20need%20help%20with%20a%20Bitcoin%20deposit." target="_blank" rel="noopener" style="color:var(--green); font-weight:700; text-decoration:none;">Contact admin on WhatsApp</a>
+    </div>
+  </div>
+
+  <!-- TRANSACTION HASH MODAL -->
+  <div class="modal-overlay" id="hashModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="hashTitle">
+      <div class="modal-head">
+        <h2 id="hashTitle"><i class="fas fa-receipt"></i> Confirm your payment</h2>
+        <button type="button" class="modal-close" id="closeHashModal" aria-label="Close">
+          <i class="fas fa-xmark"></i>
+        </button>
+      </div>
+      <p class="modal-sub">
+        Paste the transaction hash (TXID) from your Bitcoin wallet. We'll open WhatsApp so you can send it to the admin for confirmation.
+      </p>
+
+      <div class="field">
+        <label for="txHash">Transaction hash (TXID)</label>
+        <div class="input-wrap">
+          <i class="fas fa-hashtag icon"></i>
+          <input type="text" id="txHash" placeholder="e.g. 4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b" spellcheck="false" autocomplete="off">
+        </div>
+        <div style="font-size:0.76rem; color:var(--muted-2); margin-top:6px;">
+          <i class="fas fa-info-circle"></i> Usually 64 characters. You can find it in your wallet's transaction details.
+        </div>
+      </div>
+
+      <button class="btn btn-wa" id="confirmWaBtn" style="margin-top:6px;">
+        <i class="fab fa-whatsapp"></i> Send confirmation to admin
+      </button>
+      <div style="text-align:center; font-size:0.78rem; color:var(--muted-2); margin-top:12px;">
+        This will open WhatsApp with your deposit details prefilled.
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- QR code library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <script>
+    /* =========================================================
+       CONSTANTS
+       ========================================================= */
+    const ADMIN_WHATSAPP = '447448774304';
+    const DEPOSIT_ADDRESS = 'bc1qtkzm9j7v0tj87xes80pm0avstgme6c0sxquszm';
+    const MIN_USD = 10;
+
+    /* =========================================================
+       STATE
+       ========================================================= */
+    let btcPrice = 0;
+    let currentUsd = 0;
+    let currentBtc = 0;
+    let currentTxHash = '';
+    let rateInterval = null;
+
+    /* =========================================================
+       DOM
+       ========================================================= */
+    const usdInput = document.getElementById('usdAmount');
+    const btcAmountEl = document.getElementById('btcAmount');
+    const rateDisplay = document.getElementById('rateDisplay');
+    const ratePillText = document.getElementById('ratePillText');
+
+    const stageInput = document.getElementById('stageInput');
+    const stageLoading = document.getElementById('stageLoading');
+    const stageAddress = document.getElementById('stageAddress');
+
+    const generateBtn = document.getElementById('generateBtn');
+    const paidBtn = document.getElementById('paidBtn');
+    const startOverBtn = document.getElementById('startOverBtn');
+
+    const progressFill = document.getElementById('progressFill');
+    const loadingStep = document.getElementById('loadingStep');
+
+    const addressBtcAmount = document.getElementById('addressBtcAmount');
+    const addressUsdAmount = document.getElementById('addressUsdAmount');
+    const depositAddressEl = document.getElementById('depositAddress');
+    const copyBtn = document.getElementById('copyBtn');
+
+    const hashModal = document.getElementById('hashModal');
+    const closeHashModal = document.getElementById('closeHashModal');
+    const txHashInput = document.getElementById('txHash');
+    const confirmWaBtn = document.getElementById('confirmWaBtn');
+
+    const toast = document.getElementById('toast');
+
+    /* =========================================================
+       HELPERS
+       ========================================================= */
+    function fmtUsd(n) {
+      return '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    function fmtBtc(n) {
+      return Number(n).toFixed(8) + ' BTC';
+    }
+    function showToast(msg, type) {
+      toast.textContent = msg;
+      toast.className = 'toast show ' + (type || '');
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => { toast.className = 'toast ' + (type || ''); }, 3200);
+    }
+
+    /* =========================================================
+       LIVE BTC PRICE (CoinGecko public API)
+       ========================================================= */
+    async function fetchBtcPrice() {
+      try {
+        const res = await fetch(
+          'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd',
+          { headers: { 'Accept': 'application/json' } }
+        );
+        if (!res.ok) throw new Error('rate fetch failed');
+        const data = await res.json();
+        const p = data && data.bitcoin && data.bitcoin.usd;
+        if (p && p > 0) {
+          btcPrice = p;
+          rateDisplay.textContent = `1 BTC ≈ ${fmtUsd(btcPrice)}`;
+          ratePillText.textContent = 'live';
+          updateConversion();
+          return true;
+        }
+      } catch (e) {
+        console.warn('CoinGecko failed, using fallback:', e);
+      }
+      // Fallback price if API fails
+      if (!btcPrice) btcPrice = 63000;
+      rateDisplay.textContent = `1 BTC ≈ ${fmtUsd(btcPrice)} (fallback)`;
+      ratePillText.textContent = 'offline';
+      updateConversion();
+      return false;
+    }
+
+    function updateConversion() {
+      const usd = parseFloat(usdInput.value) || 0;
+      currentUsd = usd;
+      if (usd > 0 && btcPrice > 0) {
+        currentBtc = usd / btcPrice;
+        btcAmountEl.textContent = fmtBtc(currentBtc);
+      } else {
+        currentBtc = 0;
+        btcAmountEl.textContent = '0.00000000 BTC';
+      }
+    }
+
+    usdInput.addEventListener('input', updateConversion);
+
+    document.querySelectorAll('.quick-amounts button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        usdInput.value = btn.dataset.amt;
+        updateConversion();
+      });
+    });
+
+    // Refresh rate every 60s
+    fetchBtcPrice();
+    rateInterval = setInterval(fetchBtcPrice, 60000);
+
+    /* =========================================================
+       STAGE CONTROL
+       ========================================================= */
+    function showStage(name) {
+      [stageInput, stageLoading, stageAddress].forEach(s => s.classList.remove('active'));
+      if (name === 'input') stageInput.classList.add('active');
+      if (name === 'loading') stageLoading.classList.add('active');
+      if (name === 'address') stageAddress.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* =========================================================
+       GENERATE ADDRESS FLOW
+       ========================================================= */
+    generateBtn.addEventListener('click', async () => {
+      const usd = parseFloat(usdInput.value) || 0;
+      if (!usd || usd < MIN_USD) {
+        showToast('Minimum deposit is $' + MIN_USD, 'error');
+        usdInput.focus();
+        return;
+      }
+      if (!btcPrice || btcPrice <= 0) {
+        await fetchBtcPrice();
+        if (!btcPrice) {
+          showToast('Could not fetch BTC rate. Try again.', 'error');
+          return;
+        }
+      }
+
+      currentUsd = usd;
+      currentBtc = usd / btcPrice;
+
+      showStage('loading');
+      runLoadingAnimation();
+    });
+
+    function runLoadingAnimation() {
+      progressFill.style.width = '0%';
+      const steps = [
+        { at: 0,    text: 'Connecting to secure node…' },
+        { at: 1200, text: 'Verifying wallet signature…' },
+        { at: 2400, text: 'Generating unique deposit address…' },
+        { at: 3600, text: 'Encrypting transaction data…' },
+        { at: 4800, text: 'Finalizing…' }
+      ];
+
+      // Animate progress bar 0 → 100 over 5 seconds
+      const start = performance.now();
+      const duration = 5000;
+
+      function tick(now) {
+        const elapsed = now - start;
+        const pct = Math.min(100, (elapsed / duration) * 100);
+        progressFill.style.width = pct + '%';
+
+        // Update step text
+        for (let i = steps.length - 1; i >= 0; i--) {
+          if (elapsed >= steps[i].at) {
+            loadingStep.textContent = steps[i].text;
+            break;
+          }
+        }
+
+        if (elapsed < duration) {
+          requestAnimationFrame(tick);
+        } else {
+          // Done — reveal address
+          setTimeout(revealAddress, 200);
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+
+    function revealAddress() {
+      addressBtcAmount.textContent = fmtBtc(currentBtc);
+      addressUsdAmount.textContent = fmtUsd(currentUsd) + ' (≈ at current rate)';
+      depositAddressEl.textContent = DEPOSIT_ADDRESS;
+
+      // Render QR code
+      const qrContainer = document.getElementById('qrcode');
+      qrContainer.innerHTML = '';
+      try {
+        new QRCode(qrContainer, {
+          text: DEPOSIT_ADDRESS,
+          width: 200,
+          height: 200,
+          colorDark: '#0a2540',
+          colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.H
+        });
+      } catch (e) {
+        console.error('QR generation failed', e);
+        qrContainer.innerHTML = '<div style="color:#888; font-size:0.8rem; text-align:center; padding:40px 10px;">QR unavailable — use address below</div>';
+      }
+
+      showStage('address');
+    }
+
+    /* =========================================================
+       COPY ADDRESS
+       ========================================================= */
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(DEPOSIT_ADDRESS);
+        copyBtn.innerHTML = '<i class="fas fa-check"></i>';
+        copyBtn.classList.add('copied');
+        showToast('Address copied to clipboard', 'success');
+        setTimeout(() => {
+          copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
+          copyBtn.classList.remove('copied');
+        }, 1800);
+      } catch (e) {
+        // Fallback for insecure context
+        const ta = document.createElement('textarea');
+        ta.value = DEPOSIT_ADDRESS;
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); showToast('Address copied', 'success'); }
+        catch (err) { showToast('Copy failed — please select manually', 'error'); }
+        document.body.removeChild(ta);
+      }
+    });
+
+    /* =========================================================
+       START OVER
+       ========================================================= */
+    startOverBtn.addEventListener('click', () => {
+      usdInput.value = '';
+      updateConversion();
+      showStage('input');
+    });
+
+    /* =========================================================
+       I HAVE PAID → HASH MODAL
+       ========================================================= */
+    paidBtn.addEventListener('click', () => {
+      txHashInput.value = '';
+      hashModal.classList.add('open');
+      setTimeout(() => txHashInput.focus(), 120);
+    });
+
+    closeHashModal.addEventListener('click', () => hashModal.classList.remove('open'));
+    hashModal.addEventListener('click', (e) => {
+      if (e.target === hashModal) hashModal.classList.remove('open');
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') hashModal.classList.remove('open');
+    });
+
+    /* =========================================================
+       CONFIRM → WHATSAPP
+       ========================================================= */
+    confirmWaBtn.addEventListener('click', () => {
+      const hash = txHashInput.value.trim();
+
+      if (!hash) {
+        txHashInput.style.borderColor = '#e74c3c';
+        showToast('Please enter your transaction hash', 'error');
+        return;
+      }
+      if (hash.length < 10) {
+        txHashInput.style.borderColor = '#e74c3c';
+        showToast('Transaction hash looks too short', 'error');
+        return;
+      }
+      txHashInput.style.borderColor = '';
+
+      // Save activity for dashboard
+      try {
+        const activity = JSON.parse(localStorage.getItem('trustInvestActivity') || '[]');
+        activity.unshift({
+          type: 'deposit',
+          title: 'BTC Deposit (pending confirmation)',
+          amount: currentUsd,
+          date: new Date().toLocaleString(),
+          txHash: hash
+        });
+        localStorage.setItem('trustInvestActivity', JSON.stringify(activity.slice(0, 20)));
+      } catch (e) {}
+
+      // Build WhatsApp message with all info
+      const user = JSON.parse(localStorage.getItem('trustInvestUser') || '{}');
+      const message =
+        `🔔 *New Bitcoin Deposit — Confirmation Request* 🔔\n\n` +
+        `👤 *Name:* ${user.fullName || 'N/A'}\n` +
+        `📧 *Email:* ${user.email || 'N/A'}\n` +
+        `📱 *Phone:* ${user.phone || 'N/A'}\n\n` +
+        `💰 *Amount (USD):* ${fmtUsd(currentUsd)}\n` +
+        `₿ *Amount (BTC):* ${fmtBtc(currentBtc)}\n` +
+        `📈 *Rate used:* 1 BTC = ${fmtUsd(btcPrice)}\n\n` +
+        `🏦 *Deposit Address:*\n${DEPOSIT_ADDRESS}\n\n` +
+        `🔗 *Transaction Hash (TXID):*\n${hash}\n\n` +
+        `⏰ *Submitted:* ${new Date().toLocaleString()}\n\n` +
+        `✅ Please verify and credit my Trust Invest account. Thank you!`;
+
+      const url = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
+      hashModal.classList.remove('open');
+      window.open(url, '_blank', 'noopener');
+      showToast('Opening WhatsApp to confirm your deposit…', 'success');
+    });
+
+    txHashInput.addEventListener('input', () => { txHashInput.style.borderColor = ''; });
+
+    /* =========================================================
+       CLEANUP
+       ========================================================= */
+    window.addEventListener('beforeunload', () => {
+      if (rateInterval) clearInterval(rateInterval);
+    });
+  </script>
+</body>
+</html>

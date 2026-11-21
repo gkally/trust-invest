@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transaction History — Trust Invest</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --ink: #0a2540;
+      --ink-soft: #1e3b4b;
+      --muted: #4f6a7c;
+      --muted-2: #8aa3b1;
+      --green: #1e7b4c;
+      --green-dark: #14633a;
+      --green-soft: #e9f3ee;
+      --line: #deede7;
+      --bg: #f6f9fc;
+      --card: #ffffff;
+      --red: #e74c3c;
+      --red-soft: #fdecec;
+      --amber: #f39c12;
+      --amber-soft: #fff8ee;
+      --btc: #f7931a;
+      --blue: #2980b9;
+      --blue-soft: #eaf4fb;
+      --purple: #9b59b6;
+      --purple-soft: #f4ecf7;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+      min-height: 100vh;
+      padding-bottom: 40px;
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 22px; }
+
+    /* TOPBAR */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 0;
+      flex-wrap: wrap;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.92rem;
+      padding: 10px 16px;
+      border-radius: 40px;
+      background: white;
+      border: 1px solid var(--line);
+      transition: 0.2s;
+    }
+    .back-link:hover { border-color: var(--green); color: var(--green); }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .brand i { color: var(--green); font-size: 1.5rem; }
+
+    /* PAGE HEADER */
+    .page-head { margin: 10px 0 24px; }
+    .page-head h1 {
+      font-size: 1.9rem;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .page-head h1 i { color: var(--green); font-size: 1.6rem; }
+    .page-head p { color: var(--muted); font-size: 0.95rem; margin-top: 4px; }
+
+    /* SUMMARY CARDS */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px;
+      margin-bottom: 26px;
+    }
+    .sum-card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 18px 20px;
+      box-shadow: 0 8px 22px rgba(0,50,30,0.04);
+    }
+    .sum-card .k {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--muted-2);
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .sum-card .v {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--ink);
+      line-height: 1.1;
+    }
+    .sum-card .v.green { color: var(--green); }
+    .sum-card .v.red { color: var(--red); }
+    .sum-card .v.amber { color: var(--amber); }
+
+    /* FILTERS */
+    .filters {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .filter-chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      background: white;
+      padding: 5px;
+      border-radius: 50px;
+      border: 1px solid var(--line);
+    }
+    .chip {
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.82rem;
+      padding: 9px 16px;
+      border-radius: 40px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+    .chip:hover { color: var(--green); background: var(--green-soft); }
+    .chip.active { background: var(--green); color: white; }
+    .chip .count {
+      background: rgba(255,255,255,0.25);
+      padding: 1px 7px;
+      border-radius: 20px;
+      font-size: 0.68rem;
+    }
+    .chip:not(.active) .count { background: var(--green-soft); color: var(--green); }
+
+    .search-box {
+      position: relative;
+      flex: 1 1 240px;
+      max-width: 320px;
+    }
+    .search-box i {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted-2);
+      font-size: 0.85rem;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 11px 14px 11px 40px;
+      font-family: inherit;
+      font-size: 0.88rem;
+      color: var(--ink);
+      background: white;
+      border: 1.5px solid var(--line);
+      border-radius: 40px;
+      outline: none;
+      transition: 0.2s;
+    }
+    .search-box input:focus { border-color: var(--green); box-shadow: 0 0 0 4px rgba(30,123,76,0.1); }
+
+    /* TRANSACTION LIST */
+    .tx-list { display: flex; flex-direction: column; gap: 12px; }
+
+    .tx-card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 6px 18px rgba(0,50,30,0.04);
+      transition: all 0.2s ease;
+    }
+    .tx-card:hover {
+      border-color: #b5d5c7;
+      box-shadow: 0 12px 28px rgba(20,90,50,0.08);
+      transform: translateY(-1px);
+    }
+    .tx-icon {
+      width: 48px; height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .tx-icon.deposit     { background: var(--green-soft); color: var(--green); }
+    .tx-icon.withdraw    { background: var(--red-soft); color: var(--red); }
+    .tx-icon.invest      { background: var(--blue-soft); color: var(--blue); }
+    .tx-icon.maturity    { background: #e9f8f0; color: var(--green-dark); }
+    .tx-icon.credit      { background: var(--green-soft); color: var(--green); }
+    .tx-icon.debit       { background: var(--amber-soft); color: var(--amber); }
+    .tx-icon.withdraw-refund { background: #e8f4fd; color: var(--blue); }
+    .tx-icon.default     { background: #eef5f1; color: var(--muted); }
+
+    .tx-body { flex: 1; min-width: 0; }
+    .tx-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .tx-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+    .tx-badge.pending { background: var(--amber-soft); color: var(--amber); }
+    .tx-badge.confirmed { background: var(--green-soft); color: var(--green); }
+    .tx-badge.active { background: var(--blue-soft); color: var(--blue); }
+    .tx-badge.completed { background: #eef5f1; color: var(--muted); }
+    .tx-badge.paid { background: var(--green-soft); color: var(--green); }
+    .tx-badge.declined { background: var(--red-soft); color: var(--red); }
+
+    .tx-meta {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 3px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .tx-meta span { display: inline-flex; align-items: center; gap: 4px; }
+    .tx-meta .hash {
+      font-family: 'Courier New', monospace;
+      font-size: 0.72rem;
+      color: var(--muted-2);
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .tx-amount {
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      text-align: right;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+    .tx-amount.pos { color: var(--green); }
+    .tx-amount.neg { color: var(--red); }
+    .tx-amount.neu { color: var(--muted); }
+    .tx-amount small {
+      display: block;
+      font-size: 0.7rem;
+      color: var(--muted-2);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* EMPTY */
+    .empty-state {
+      text-align: center;
+      padding: 70px 20px;
+      color: var(--muted);
+      background: white;
+      border-radius: 24px;
+      border: 1px dashed var(--line);
+    }
+    .empty-state i { font-size: 3rem; color: var(--muted-2); margin-bottom: 16px; display: block; }
+    .empty-state p { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+    .empty-state small { font-size: 0.85rem; color: var(--muted-2); }
+
+    /* LOADING */
+    .loading-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+    }
+    .loading-state i { font-size: 2rem; color: var(--green); margin-bottom: 14px; display: block; }
+    .loading-state p { font-size: 0.95rem; font-weight: 600; }
+
+    /* LOAD MORE */
+    .load-more {
+      display: block;
+      margin: 24px auto 0;
+      padding: 14px 32px;
+      font-family: inherit;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--green);
+      background: white;
+      border: 1.5px solid var(--green);
+      border-radius: 60px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .load-more:hover { background: var(--green); color: white; }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--ink);
+      color: white;
+      padding: 13px 24px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.35s;
+      z-index: 3000;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      max-width: 90vw;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.success { background: var(--green); }
+    .toast.error { background: var(--red); }
+
+    @media (max-width: 600px) {
+      .tx-card { padding: 16px; gap: 12px; }
+      .tx-icon { width: 42px; height: 42px; font-size: 1rem; }
+      .tx-title { font-size: 0.88rem; }
+      .tx-amount { font-size: 0.95rem; }
+      .filters { flex-direction: column; align-items: stretch; }
+      .search-box { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <a href="dashboard.html" class="back-link"><i class="fas fa-arrow-left"></i> Dashboard</a>
+      <a href="index.html" class="brand"><i class="fas fa-shield-halved"></i> Trust Invest</a>
+    </div>
+
+    <!-- PAGE HEADER -->
+    <div class="page-head">
+      <h1><i class="fas fa-clock-rotate-left"></i> Transaction history</h1>
+      <p>All your deposits, withdrawals, investments, and account activity.</p>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="summary-grid">
+      <div class="sum-card">
+        <div class="k"><i class="fas fa-list"></i> Total transactions</div>
+        <div class="v" id="sumTotal">0</div>
+      </div>
+      <div class="sum-card">
+        <div class="k"><i class="fas fa-arrow-down"></i> Total deposits</div>
+        <div class="v green" id="sumDeposits">$0.00</div>
+      </div>
+      <div class="sum-card">
+        <div class="k"><i class="fas fa-arrow-up"></i> Total withdrawals</div>
+        <div class="v red" id="sumWithdrawals">$0.00</div>
+      </div>
+      <div class="sum-card">
+        <div class="k"><i class="fas fa-chart-line"></i> Total invested</div>
+        <div class="v amber" id="sumInvested">$0.00</div>
+      </div>
+      <div class="sum-card">
+        <div class="k"><i class="fas fa-coins"></i> Total profit earned</div>
+        <div class="v green" id="sumProfit">$0.00</div>
+      </div>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="filters">
+      <div class="filter-chips" id="filterChips">
+        <button class="chip active" data-filter="all">All <span class="count" id="countAll">0</span></button>
+        <button class="chip" data-filter="deposit">Deposits <span class="count" id="countDeposit">0</span></button>
+        <button class="chip" data-filter="withdraw">Withdrawals <span class="count" id="countWithdraw">0</span></button>
+        <button class="chip" data-filter="invest">Investments <span class="count" id="countInvest">0</span></button>
+        <button class="chip" data-filter="profit">Profit <span class="count" id="countProfit">0</span></button>
+      </div>
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Search transactions…">
+      </div>
+    </div>
+
+    <!-- TRANSACTION LIST -->
+    <div class="tx-list" id="txList">
+      <div class="loading-state">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>Loading your history…</p>
+      </div>
+    </div>
+
+    <button class="load-more" id="loadMoreBtn" style="display:none;">
+      <i class="fas fa-chevron-down"></i> Load more
+    </button>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    /* =========================================================
+       CONFIG
+       ========================================================= */
+    const PAGE_SIZE = 15;
+
+    /* =========================================================
+       AUTH
+       ========================================================= */
+    const token = localStorage.getItem('trustInvestToken');
+    let currentUser = {};
+    try { currentUser = JSON.parse(localStorage.getItem('trustInvestUser') || '{}'); } catch(e) {}
+    if (!token) window.location.href = 'login.html';
+
+    /* =========================================================
+       STATE
+       ========================================================= */
+    let allActivity = [];      // combined normalized list
+    let filtered = [];
+    let activeFilter = 'all';
+    let searchQuery = '';
+    let visibleCount = PAGE_SIZE;
+
+    /* =========================================================
+       DOM
+       ========================================================= */
+    const txList = document.getElementById('txList');
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    const searchInput = document.getElementById('searchInput');
+    const toast = document.getElementById('toast');
+
+    /* =========================================================
+       HELPERS
+       ========================================================= */
+    function fmtUsd(n) {
+      return '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    function fmtBtc(n) {
+      return Number(n || 0).toFixed(8) + ' BTC';
+    }
+    function fmtDate(d) {
+      if (!d) return '—';
+      const dt = new Date(d);
+      if (isNaN(dt)) return '—';
+      return dt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) +
+             ' · ' + dt.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+    }
+    function showToast(msg, type) {
+      toast.textContent = msg;
+      toast.className = 'toast show ' + (type || '');
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => { toast.className = 'toast ' + (type || ''); }, 3200);
+    }
+
+    async function api(path, opts = {}) {
+      const res = await fetch(path, {
+        ...opts,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
+          'x-user-id': currentUser.id || '',
+          ...(opts.headers || {})
+        }
+      });
+      let data = {};
+      try { data = await res.json(); } catch(e) {}
+      if (!res.ok) throw new Error(data.message || 'Request failed');
+      return data;
+    }
+
+    /* =========================================================
+       NORMALIZE ACTIVITY
+       ========================================================= */
+    function normalizeActivity(raw) {
+      return (raw || []).map(item => {
+        let type = item.type || 'default';
+        let title = '';
+        let icon = 'fa-circle-info';
+        let amount = Number(item.amount) || 0;
+        let sign = 'neu';
+        let status = null;
+        let secondary = '';
+
+        switch (type) {
+          case 'deposit':
+            title = 'Bitcoin deposit';
+            icon = 'fa-arrow-down';
+            sign = 'pos';
+            status = item.status || 'pending';
+            if (item.txHash) secondary = item.txHash;
+            break;
+          case 'withdraw':
+            title = 'Bitcoin withdrawal';
+            icon = 'fa-arrow-up';
+            sign = 'neg';
+            status = 'pending';
+            if (item.address) secondary = item.address;
+            break;
+          case 'invest':
+            title = 'Investment — ' + (item.plan ? item.plan.charAt(0).toUpperCase() + item.plan.slice(1) : 'Plan');
+            icon = 'fa-chart-line';
+            sign = 'neg';
+            status = 'active';
+            if (item.profit) secondary = 'Profit: ' + fmtUsd(item.profit);
+            break;
+          case 'maturity':
+            title = 'Investment matured — ' + (item.plan || 'Plan');
+            icon = 'fa-coins';
+            sign = 'pos';
+            status = 'completed';
+            if (item.profit) secondary = 'Profit: ' + fmtUsd(item.profit);
+            break;
+          case 'credit':
+            title = 'Account credit';
+            icon = 'fa-plus';
+            sign = 'pos';
+            secondary = item.note || '';
+            break;
+          case 'debit':
+            title = 'Account debit';
+            icon = 'fa-minus';
+            sign = 'neg';
+            secondary = item.note || '';
+            break;
+          case 'withdraw-refund':
+            title = 'Withdrawal refunded';
+            icon = 'fa-rotate-left';
+            sign = 'pos';
+            secondary = item.note || '';
+            break;
+          default:
+            title = item.note || 'Transaction';
+            icon = 'fa-circle-info';
+            sign = 'neu';
+        }
+
+        return {
+          raw: item,
+          type,
+          title,
+          icon,
+          amount,
+          sign,
+          status,
+          secondary,
+          at: item.at || item.createdAt || new Date().toISOString()
+        };
+      }).sort((a, b) => new Date(b.at) - new Date(a.at));
+    }
+
+    /* =========================================================
+       LOAD
+       ========================================================= */
+    async function loadHistory() {
+      try {
+        const data = await api('/api/user/overview');
+        const raw = data.activity || [];
+        allActivity = normalizeActivity(raw);
+        updateSummary();
+        applyFilters();
+      } catch (err) {
+        console.error('Failed to load history:', err);
+        // Fallback to localStorage
+        try {
+          const local = JSON.parse(localStorage.getItem('trustInvestActivity') || '[]');
+          allActivity = normalizeActivity(local);
+          updateSummary();
+          applyFilters();
+        } catch(e) {
+          txList.innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-triangle-exclamation"></i>
+              <p>Could not load history</p>
+              <small>${err.message}</small>
+            </div>`;
+        }
+      }
+    }
+
+    /* =========================================================
+       SUMMARY
+       ========================================================= */
+    function updateSummary() {
+      let deposits = 0, withdrawals = 0, invested = 0, profit = 0;
+      allActivity.forEach(t => {
+        if (t.type === 'deposit' && t.status === 'confirmed') deposits += t.amount;
+        else if (t.type === 'deposit') deposits += t.amount;
+        else if (t.type === 'withdraw') withdrawals += t.amount;
+        else if (t.type === 'invest') invested += t.amount;
+        else if (t.type === 'maturity' || t.type === 'credit') profit += t.amount;
+      });
+
+      document.getElementById('sumTotal').textContent = allActivity.length;
+      document.getElementById('sumDeposits').textContent = fmtUsd(deposits);
+      document.getElementById('sumWithdrawals').textContent = fmtUsd(withdrawals);
+      document.getElementById('sumInvested').textContent = fmtUsd(invested);
+      document.getElementById('sumProfit').textContent = fmtUsd(profit);
+
+      document.getElementById('countAll').textContent = allActivity.length;
+      document.getElementById('countDeposit').textContent = allActivity.filter(t => t.type === 'deposit').length;
+      document.getElementById('countWithdraw').textContent = allActivity.filter(t => t.type === 'withdraw').length;
+      document.getElementById('countInvest').textContent = allActivity.filter(t => t.type === 'invest').length;
+      document.getElementById('countProfit').textContent = allActivity.filter(t => t.type === 'maturity' || t.type === 'credit').length;
+    }
+
+    /* =========================================================
+       FILTERS
+       ========================================================= */
+    document.querySelectorAll('.chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        activeFilter = chip.dataset.filter;
+        visibleCount = PAGE_SIZE;
+        applyFilters();
+      });
+    });
+
+    searchInput.addEventListener('input', () => {
+      searchQuery = searchInput.value.toLowerCase().trim();
+      visibleCount = PAGE_SIZE;
+      applyFilters();
+    });
+
+    function applyFilters() {
+      filtered = allActivity.filter(t => {
+        // Type filter
+        if (activeFilter === 'deposit' && t.type !== 'deposit') return false;
+        if (activeFilter === 'withdraw' && t.type !== 'withdraw') return false;
+        if (activeFilter === 'invest' && t.type !== 'invest') return false;
+        if (activeFilter === 'profit' && !(t.type === 'maturity' || t.type === 'credit')) return false;
+
+        // Search
+        if (searchQuery) {
+          const haystack = [
+            t.title, t.secondary, t.type, t.status,
+            t.raw.txHash, t.raw.address, t.raw.note, t.raw.plan
+          ].filter(Boolean).join(' ').toLowerCase();
+          if (!haystack.includes(searchQuery)) return false;
+        }
+        return true;
+      });
+      renderList();
+    }
+
+    /* =========================================================
+       RENDER
+       ========================================================= */
+    function renderList() {
+      if (!filtered.length) {
+        txList.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <p>No transactions found</p>
+            <small>${searchQuery ? 'Try a different search' : 'Your activity will appear here'}</small>
+          </div>`;
+        loadMoreBtn.style.display = 'none';
+        return;
+      }
+
+      const visible = filtered.slice(0, visibleCount);
+      txList.innerHTML = visible.map(t => {
+        const amountClass = t.sign === 'pos' ? 'pos' : t.sign === 'neg' ? 'neg' : 'neu';
+        const signPrefix = t.sign === 'pos' ? '+' : t.sign === 'neg' ? '−' : '';
+
+        let badge = '';
+        if (t.status) {
+          const statusText = {
+            pending: 'Pending',
+            confirmed: 'Confirmed',
+            active: 'Active',
+            completed: 'Completed',
+            paid: 'Paid',
+            declined: 'Declined'
+          }[t.status] || t.status;
+          badge = `<span class="tx-badge ${t.status}">${statusText}</span>`;
+        }
+
+        let metaParts = [`<span><i class="fas fa-calendar"></i> ${fmtDate(t.at)}</span>`];
+        if (t.secondary) {
+          if (t.raw && (t.raw.txHash || t.raw.address)) {
+            const trimmed = t.secondary.length > 20
+              ? t.secondary.slice(0, 10) + '…' + t.secondary.slice(-8)
+              : t.secondary;
+            metaParts.push(`<span class="hash" title="${t.secondary}"><i class="fas fa-hashtag"></i> ${trimmed}</span>`);
+          } else {
+            metaParts.push(`<span><i class="fas fa-info-circle"></i> ${t.secondary}</span>`);
+          }
+        }
+        if (t.raw && t.raw.btc) {
+          metaParts.push(`<span><i class="fab fa-bitcoin"></i> ${fmtBtc(t.raw.btc)}</span>`);
+        }
+
+        return `
+          <div class="tx-card">
+            <div class="tx-icon ${t.type}"><i class="fas ${t.icon}"></i></div>
+            <div class="tx-body">
+              <div class="tx-title">${t.title} ${badge}</div>
+              <div class="tx-meta">${metaParts.join('')}</div>
+            </div>
+            <div class="tx-amount ${amountClass}">
+              ${signPrefix}${fmtUsd(t.amount)}
+              <small>${t.type === 'invest' ? 'invested' : t.type === 'withdraw' ? 'withdrawn' : t.type === 'maturity' ? 'payout' : ''}</small>
+            </div>
+          </div>`;
+      }).join('');
+
+      if (visibleCount < filtered.length) {
+        loadMoreBtn.style.display = 'block';
+        loadMoreBtn.innerHTML = `<i class="fas fa-chevron-down"></i> Load more (${filtered.length - visibleCount} remaining)`;
+      } else {
+        loadMoreBtn.style.display = 'none';
+      }
+    }
+
+    loadMoreBtn.addEventListener('click', () => {
+      visibleCount += PAGE_SIZE;
+      renderList();
+    });
+
+    /* =========================================================
+       BOOT
+       ========================================================= */
+    loadHistory();
+  </script>
+</body>
+</html>
